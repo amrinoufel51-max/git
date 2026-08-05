@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Annuaire des Restaurants - Commande à distance</title>
+    <style>
+        body { font-family: Tahoma, sans-serif; background: #f9f9f9; margin: 0; padding: 20px; text-align: center; direction: ltr; }
+        .container { max-width: 500px; margin: auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        input { width: 100%; padding: 12px; font-size: 16px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; margin-bottom: 15px; text-align: left; }
+        .restaurant-card { background: #fff3e0; margin: 10px 0; padding: 15px; border-radius: 6px; cursor: pointer; text-align: left; border-left: 5px solid #ff5722; }
+        .details { display: none; margin-top: 10px; background: white; padding: 10px; border-radius: 4px; text-align: left; border: 1px solid #ddd; }
+        .menu-img { width: 100%; border-radius: 6px; margin-top: 10px; border: 1px solid #ddd; }
+        .phone-btn { display: block; text-align: center; background: #4caf50; color: white; padding: 10px; border-radius: 6px; text-decoration: none; margin-top: 10px; font-weight: bold; }
+        .no-result { color: #666; font-style: italic; margin-top: 15px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Trouvez les restaurants de votre Wilaya 🍔</h2>
+    <input type="text" id="wilayaInput" placeholder="Entrez le nom de la wilaya (ex: Constantine)..." oninput="searchRestaurants()">
+
+    <div id="resultsContainer" style="margin-top: 20px;"></div>
+</div>
+
+<script>
+    // قاعدة البيانات المدمجة (يمكنك إضافة مطاعم جديدة هنا لاحقاً)
+    const database = [
+        {
+            "name": "Restaurant Les Grillades d'Or",
+            "wilaya": "Constantine",
+            "phone": "0600112233",
+            "menuImage": "https://i.imgur.com/ggFDFrb.jpeg"
+        }
+    ];
+
+    function searchRestaurants() {
+        let query = document.getElementById("wilayaInput").value.trim().toLowerCase();
+        let container = document.getElementById("resultsContainer");
+        container.innerHTML = "";
+
+        if (query === "") {
+            return; // إفراغ النتائج إذا كان حقل البحث فارغاً
+        }
+
+        // البحث بمرونة يتطابق مع الحروف حتى لو كانت ناقصة أو مختلفة الحالة
+        let filtered = database.filter(r => r.wilaya.toLowerCase().includes(query));
+
+        if (filtered.length === 0) {
+            container.innerHTML = "<p class='no-result'>Aucun restaurant trouvé pour cette wilaya.</p>";
+            return;
+        }
+
+        filtered.forEach((rest) => {
+            let card = document.createElement("div");
+            card.className = "restaurant-card";
+            card.innerHTML = `<strong>${rest.name}</strong> (${rest.wilaya})<br><small style="color:#777;">Cliquez pour voir le menu et appeler</small>`;
+            
+            let details = document.createElement("div");
+            details.className = "details";
+            
+            details.innerHTML = `
+                <h4 style="margin: 0 0 5px 0;">Menu du Restaurant :</h4>
+                <img src="${rest.menuImage}" alt="Menu de ${rest.name}" class="menu-img">
+                <a href="tel:${rest.phone}" class="phone-btn">📞 Appeler pour commander : ${rest.phone}</a>
+            `;
+
+            card.onclick = function() {
+                details.style.display = (details.style.display === "block") ? "none" : "block";
+            };
+
+            card.appendChild(details);
+            container.appendChild(card);
+        });
+    }
+</script>
+
+</body>
+</html>
