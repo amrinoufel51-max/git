@@ -8,6 +8,7 @@
     <style>
         * { box-sizing: border-box; }
         
+        /* تثبيت الخلفية لتغطي الشاشة بالكامل بدون أي بياض */
         body { 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
             background: linear-gradient(135deg, #000000, #0f172a, #1e3a8a, #090d16, #000000);
@@ -20,6 +21,19 @@
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, #000000, #0f172a, #1e3a8a, #090d16, #000000);
+            background-size: 400% 400%;
+            animation: waveBackground 12s ease infinite;
+            z-index: -2;
         }
 
         @keyframes waveBackground {
@@ -43,27 +57,18 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 85vh;
+            min-height: 80vh;
             transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* حاوية العنوان لتكون في المنتصف ثم تصعد للأعلى */
         .title-wrapper {
             position: relative;
             margin-bottom: 25px;
-            animation: moveToTop 0.5s cubic-bezier(0.16, 1, 0.3, 1) 1.2s forwards;
             text-align: center;
         }
 
-        @keyframes moveToTop {
-            to {
-                transform: translateY(0);
-            }
-        }
-
-        /* أنيماشن الحروف (تكبير ثم رجوع للحجم الطبيعي مع الهبوط) */
         .site-title {
-            font-size: 72px; /* حجم كبير في البداية */
+            font-size: 72px;
             font-weight: 900;
             letter-spacing: 4px;
             text-transform: uppercase;
@@ -99,12 +104,12 @@
             }
         }
 
-        /* خانة البحث تظهر بسرعة وسلاسة */
         .search-box-wrapper {
             width: 100%;
             max-width: 650px;
             background: rgba(15, 23, 42, 0.85);
             backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             padding: 16px 20px;
             border-radius: 16px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
@@ -148,6 +153,7 @@
         .restaurant-card { 
             background: rgba(15, 23, 42, 0.85); 
             backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             padding: 24px; 
             border-radius: 20px; 
             cursor: pointer; 
@@ -209,6 +215,7 @@
             height: 100%;
             background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             z-index: 1000;
             justify-content: center;
             align-items: center;
@@ -294,24 +301,20 @@
 <div id="particles-js"></div>
 
 <div class="container" id="mainContainer">
-    <!-- العنوان بحجم كبير في المنتصف ثم يستقر في الأعلى -->
     <div class="title-wrapper">
         <div class="site-title">
             <span>B</span><span>I</span><span>T</span><span>E</span>
         </div>
     </div>
 
-    <!-- خانة البحث تظهر بسلاسة -->
     <div class="search-box-wrapper">
         <span style="margin-left: 10px; font-size: 20px;">🔍</span>
         <input type="text" id="wilayaInput" placeholder="Entrez votre Wilaya (ex: Constantine)..." oninput="searchRestaurants()">
     </div>
 
-    <!-- نتائج البحث -->
     <div id="resultsContainer" class="grid-container"></div>
 </div>
 
-<!-- النافذة المنبثقة -->
 <div id="restaurantModal" class="modal-overlay" onclick="closeModalOnOutside(event)">
     <div class="modal-content">
         <button class="close-btn" onclick="closeModal()">×</button>
@@ -408,11 +411,10 @@
 
         if (query === "") {
             mainContainer.style.justifyContent = "center";
-            mainContainer.style.minHeight = "85vh";
+            mainContainer.style.minHeight = "80vh";
             return;
         }
 
-        // بمجرد البحث، يرتفع المحتوى قليلاً للأعلى ليترك مساحة للنتائج
         mainContainer.style.justifyContent = "flex-start";
         mainContainer.style.minHeight = "unset";
 
