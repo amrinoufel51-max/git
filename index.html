@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BITE - Annuaire des Restaurants</title>
+    
+    <!-- سكريبت الإعلانات المضاف بعد الـ head -->
+    <script src="https://quge5.com/88/tag.min.js" data-zone="267550" async data-cfasync="false"></script>
+
     <style>
         * { box-sizing: border-box; }
         
@@ -26,7 +30,7 @@
         }
 
         .container { 
-            max-width: 650px; /* عرض مناسب لكي تكون البطاقة الواحدة كبيرة وواضحة جداً */
+            max-width: 650px; 
             margin: auto; 
         }
 
@@ -66,7 +70,6 @@
             color: #94a3b8;
         }
 
-        /* شبكة الكاردات: بطاقة واحدة في كل سطر (1 column) وحجم كبير */
         .grid-container {
             display: flex;
             flex-direction: column;
@@ -94,10 +97,9 @@
             border-color: rgba(59, 130, 246, 0.7);
         }
 
-        /* صورة بروفايل مربعة بحجم كبير جداً تملأ عرض البطاقة */
         .profile-img {
             width: 100%;
-            height: 240px; /* ارتفاع كبير لتكون الصورة واضحة وملء الشاشة */
+            height: 240px;
             border-radius: 14px;
             object-fit: cover;
             border: 1px solid rgba(59, 130, 246, 0.3);
@@ -115,7 +117,6 @@
             color: #94a3b8;
         }
 
-        /* تصميم النافذة الكبيرة المنبثقة في وسط الشاشة (Modal) */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -209,17 +210,14 @@
 <div class="container">
     <div class="site-title">BITE</div>
 
-    <!-- صندوق البحث -->
     <div class="search-box-wrapper">
         <span style="margin-left: 10px; font-size: 20px;">🔍</span>
         <input type="text" id="wilayaInput" placeholder="Entrez votre Wilaya (ex: Constantine)..." oninput="searchRestaurants()">
     </div>
 
-    <!-- نتائج البحث -->
     <div id="resultsContainer" class="grid-container"></div>
 </div>
 
-<!-- النافذة المنبثقة الكبيرة في المنتصف (Modal) -->
 <div id="restaurantModal" class="modal-overlay" onclick="closeModalOnOutside(event)">
     <div class="modal-content">
         <button class="close-btn" onclick="closeModal()">×</button>
@@ -230,7 +228,6 @@
 </div>
 
 <script>
-    // قاعدة بيانات تجريبية لـ 8 مطاعم في قسنطينة
     const database = [
         {
             "name": "Le Gourmet Constantine",
