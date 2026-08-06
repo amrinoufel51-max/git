@@ -4,9 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BITE - Annuaire des Restaurants</title>
-    
-    <!-- كود الإعلان الأول (في الـ Head) -->
-    <script src="https://quge5.com/88/tag.min.js" data-zone="267550" async data-cfasync="false"></script>
 
     <style>
         * { box-sizing: border-box; }
@@ -44,17 +41,43 @@
             margin: auto; 
         }
 
+        /* أنيماشن العنوان الحرفي */
         .site-title {
             text-align: center;
-            color: #ffffff;
             font-size: 48px;
             font-weight: 900;
             letter-spacing: 3px;
             margin-bottom: 25px;
-            text-shadow: 0 4px 15px rgba(37, 99, 235, 0.5);
             text-transform: uppercase;
+            display: flex;
+            justify-content: center;
+            gap: 5px;
         }
 
+        .site-title span {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(-50px);
+            animation: dropLetter 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            background: linear-gradient(to right, #fff, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+        }
+
+        .site-title span:nth-child(1) { animation-delay: 0.1s; }
+        .site-title span:nth-child(2) { animation-delay: 0.25s; }
+        .site-title span:nth-child(3) { animation-delay: 0.4s; }
+        .site-title span:nth-child(4) { animation-delay: 0.55s; }
+
+        @keyframes dropLetter {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* أنيماشن خانة البحث تصعد من الأسفل */
         .search-box-wrapper {
             width: 100%;
             margin: 0 auto 35px auto;
@@ -66,7 +89,20 @@
             display: flex;
             align-items: center;
             border: 1px solid rgba(59, 130, 246, 0.3);
+            
+            opacity: 0;
+            transform: translateY(40px);
+            animation: slideUpSearch 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation-delay: 0.8s;
         }
+
+        @keyframes slideUpSearch {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         .search-box-wrapper input {
             border: none;
             outline: none;
@@ -239,12 +275,15 @@
 <div id="particles-js"></div>
 
 <div class="container">
-    <div class="site-title">BITE</div>
+    <!-- العنوان مع أنيماشن الحروف (حرف بحرف) -->
+    <div class="site-title">
+        <span>B</span><span>I</span><span>T</span><span>E</span>
+    </div>
 
-    <!-- خانة البحث (مع الإعلان الجديد عند النقر) -->
+    <!-- خانة البحث تصعد من الأسفل بـ Animation -->
     <div class="search-box-wrapper">
         <span style="margin-left: 10px; font-size: 20px;">🔍</span>
-        <input type="text" id="wilayaInput" placeholder="Entrez votre Wilaya (ex: Constantine)..." oninput="searchRestaurants()" onclick="triggerAd()">
+        <input type="text" id="wilayaInput" placeholder="Entrez votre Wilaya (ex: Constantine)..." oninput="searchRestaurants()">
     </div>
 
     <!-- نتائج البحث -->
@@ -276,17 +315,6 @@
         }
     }
     createParticles();
-
-    // دالة تشغيل الإعلان الجديد بالكونفيكيشن المطلوبة
-    function triggerAd() {
-        try {
-            (function(s){
-                s.dataset.zone = '11518544';
-                s.src = 'https://n6wxm.com/vignette.min.js';
-                [document.documentElement, document.body].filter(Boolean).pop().appendChild(s);
-            })(document.createElement('script'));
-        } catch(e) {}
-    }
 
     // قاعدة بيانات المطاعم
     const database = [
@@ -380,9 +408,7 @@
                 </div>
             `;
             
-            // عند النقر على المطعم: يشغل الإعلان الجديد + يفتح المينيو
             card.onclick = function() {
-                triggerAd();
                 openModal(rest);
             };
 
