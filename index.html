@@ -26,7 +26,7 @@
         }
 
         .container { 
-            max-width: 800px; /* تقليص العرض قليلاً لكي تناسب بطاقتين كبيرتين في السطر */
+            max-width: 650px; /* عرض مناسب لكي تكون البطاقة الواحدة كبيرة وواضحة جداً */
             margin: auto; 
         }
 
@@ -42,11 +42,11 @@
         }
 
         .search-box-wrapper {
-            max-width: 500px;
+            width: 100%;
             margin: 0 auto 35px auto;
             background: rgba(15, 23, 42, 0.85);
             backdrop-filter: blur(12px);
-            padding: 14px 18px;
+            padding: 16px 20px;
             border-radius: 16px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
             display: flex;
@@ -57,7 +57,7 @@
             border: none;
             outline: none;
             width: 100%;
-            font-size: 16px;
+            font-size: 18px;
             background: transparent;
             text-align: left;
             color: #ffffff;
@@ -66,23 +66,18 @@
             color: #94a3b8;
         }
 
-        /* شبكة الكاردات: مطعمين في السطر (2 columns) */
+        /* شبكة الكاردات: بطاقة واحدة في كل سطر (1 column) وحجم كبير */
         .grid-container {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            display: flex;
+            flex-direction: column;
             gap: 25px;
-        }
-
-        /* للشاشات الصغيرة جداً تصبح بطاقة واحدة في السطر */
-        @media (max-width: 600px) {
-            .grid-container { grid-template-columns: 1fr; }
         }
 
         .restaurant-card { 
             background: rgba(15, 23, 42, 0.85); 
             backdrop-filter: blur(12px);
             padding: 24px; 
-            border-radius: 18px; 
+            border-radius: 20px; 
             cursor: pointer; 
             text-align: center; 
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
@@ -91,31 +86,32 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            width: 100%;
         }
         .restaurant-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-4px);
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
             border-color: rgba(59, 130, 246, 0.7);
         }
 
-        /* صورة بروفايل مربعة (Square) بزوايا دائرية */
+        /* صورة بروفايل مربعة بحجم كبير جداً تملأ عرض البطاقة */
         .profile-img {
             width: 100%;
-            height: 160px;
-            border-radius: 12px;
+            height: 240px; /* ارتفاع كبير لتكون الصورة واضحة وملء الشاشة */
+            border-radius: 14px;
             object-fit: cover;
             border: 1px solid rgba(59, 130, 246, 0.3);
-            margin-bottom: 15px;
+            margin-bottom: 18px;
         }
 
         .restaurant-info h3 {
-            margin: 0 0 6px 0;
-            font-size: 20px;
+            margin: 0 0 8px 0;
+            font-size: 24px;
             color: #ffffff;
         }
         .restaurant-info p {
             margin: 0;
-            font-size: 14px;
+            font-size: 16px;
             color: #94a3b8;
         }
 
@@ -138,7 +134,7 @@
         .modal-content {
             background: #0f172a;
             border: 1px solid rgba(59, 130, 246, 0.4);
-            max-width: 600px;
+            max-width: 650px;
             width: 100%;
             border-radius: 20px;
             padding: 25px;
@@ -169,7 +165,7 @@
         .close-btn:hover { background: rgba(255, 255, 255, 0.2); }
 
         .modal-title {
-            font-size: 24px;
+            font-size: 26px;
             color: #ffffff;
             margin: 0 0 15px 0;
         }
@@ -178,7 +174,7 @@
             width: 100%;
             border-radius: 12px;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            max-height: 400px;
+            max-height: 450px;
             object-fit: contain;
             background: #000;
         }
@@ -188,7 +184,7 @@
             text-align: center;
             background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
             color: white;
-            padding: 14px;
+            padding: 15px;
             border-radius: 12px;
             text-decoration: none;
             margin-top: 20px;
@@ -202,10 +198,9 @@
         .no-result { 
             text-align: center; 
             color: #94a3b8; 
-            font-size: 15px; 
+            font-size: 16px; 
             margin-top: 30px; 
             font-weight: 500;
-            grid-column: 1 / -1;
         }
     </style>
 </head>
@@ -216,11 +211,11 @@
 
     <!-- صندوق البحث -->
     <div class="search-box-wrapper">
-        <span style="margin-left: 10px; font-size: 18px;">🔍</span>
+        <span style="margin-left: 10px; font-size: 20px;">🔍</span>
         <input type="text" id="wilayaInput" placeholder="Entrez votre Wilaya (ex: Constantine)..." oninput="searchRestaurants()">
     </div>
 
-    <!-- شبكة نتائج البحث -->
+    <!-- نتائج البحث -->
     <div id="resultsContainer" class="grid-container"></div>
 </div>
 
@@ -241,56 +236,56 @@
             "name": "Le Gourmet Constantine",
             "wilaya": "Constantine",
             "phone": "0600112233",
-            "profileImg": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=400",
+            "profileImg": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=700",
             "menuImage": "https://i.imgur.com/ggFDFrb.jpeg"
         },
         {
             "name": "Fast Food El Gusto",
             "wilaya": "Constantine",
             "phone": "0611223344",
-            "profileImg": "https://images.unsplash.com/photo-1543007630-9710e4a00a20?w=400",
+            "profileImg": "https://images.unsplash.com/photo-1543007630-9710e4a00a20?w=700",
             "menuImage": "https://i.imgur.com/ggFDFrb.jpeg"
         },
         {
             "name": "Pizzeria Roma",
             "wilaya": "Constantine",
             "phone": "0622334455",
-            "profileImg": "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400",
+            "profileImg": "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=700",
             "menuImage": "https://i.imgur.com/ggFDFrb.jpeg"
         },
         {
             "name": "Tacos King",
             "wilaya": "Constantine",
             "phone": "0633445566",
-            "profileImg": "https://images.unsplash.com/photo-1550547660-d9450f859349?w=400",
+            "profileImg": "https://images.unsplash.com/photo-1550547660-d9450f859349?w=700",
             "menuImage": "https://i.imgur.com/ggFDFrb.jpeg"
         },
         {
             "name": "Grillades du Rocher",
             "wilaya": "Constantine",
             "phone": "0644556677",
-            "profileImg": "https://images.unsplash.com/photo-1544025162-d76694265947?w=400",
+            "profileImg": "https://images.unsplash.com/photo-1544025162-d76694265947?w=700",
             "menuImage": "https://i.imgur.com/ggFDFrb.jpeg"
         },
         {
             "name": "Chawarma El Emir",
             "wilaya": "Constantine",
             "phone": "0655667788",
-            "profileImg": "https://images.unsplash.com/photo-1561758033-d89a9ad46330?w=400",
+            "profileImg": "https://images.unsplash.com/photo-1561758033-d89a9ad46330?w=700",
             "menuImage": "https://i.imgur.com/ggFDFrb.jpeg"
         },
         {
             "name": "Restaurant Cirta",
             "wilaya": "Constantine",
             "phone": "0666778899",
-            "profileImg": "https://images.unsplash.com/photo-1537047902294-62a40c20a6ae?w=400",
+            "profileImg": "https://images.unsplash.com/photo-1537047902294-62a40c20a6ae?w=700",
             "menuImage": "https://i.imgur.com/ggFDFrb.jpeg"
         },
         {
             "name": "Sandwicherie Express",
             "wilaya": "Constantine",
             "phone": "0677889900",
-            "profileImg": "https://images.unsplash.com/photo-1525351484163-7529414344d8?w=400",
+            "profileImg": "https://images.unsplash.com/photo-1525351484163-7529414344d8?w=700",
             "menuImage": "https://i.imgur.com/ggFDFrb.jpeg"
         }
     ];
