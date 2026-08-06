@@ -4,19 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BITE - Annuaire des Restaurants</title>
-    <!-- كود التحقق الخاص بالمنصة -->
-    <meta name="monetag" content="2c219f1cff1ca96b1569fd89056dd93b">
     <style>
         * { box-sizing: border-box; }
         
-        /* خلفية عصرية متحركة بتموجات بين الأسود والأزرق الداكن */
         body { 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
             background: linear-gradient(135deg, #000000, #0f172a, #1e3a8a, #090d16, #000000);
             background-size: 400% 400%;
             animation: waveBackground 12s ease infinite;
             margin: 0; 
-            padding: 20px 0; 
+            padding: 30px 15px; 
             direction: ltr; 
             color: #f8fafc;
             min-height: 100vh;
@@ -29,25 +26,24 @@
         }
 
         .container { 
-            max-width: 480px; 
+            max-width: 1200px; /* توسيع العرض لاستيعاب 4 كاردات في السطر */
             margin: auto; 
-            padding: 0 15px; 
         }
 
-        /* عنوان الموقع BITE كبير، عريض ومميز */
         .site-title {
             text-align: center;
             color: #ffffff;
-            font-size: 42px;
+            font-size: 48px;
             font-weight: 900;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             margin-bottom: 25px;
             text-shadow: 0 4px 15px rgba(37, 99, 235, 0.5);
             text-transform: uppercase;
         }
 
-        /* صندوق البحث بتصميم زجاجي داكن وعصري */
         .search-box-wrapper {
+            max-width: 500px;
+            margin: 0 auto 35px auto;
             background: rgba(15, 23, 42, 0.85);
             backdrop-filter: blur(12px);
             padding: 14px 18px;
@@ -55,7 +51,6 @@
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
             display: flex;
             align-items: center;
-            margin-bottom: 25px;
             border: 1px solid rgba(59, 130, 246, 0.3);
         }
         .search-box-wrapper input {
@@ -71,48 +66,76 @@
             color: #94a3b8;
         }
 
-        /* بطاقة المطعم بتصميم داكن وعائم */
+        /* نظام الشبكة: 4 كاردات في السطر بالشاشات الكبيرة */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        /* استجابة الشاشات المتوسطة والصغيرة */
+        @media (max-width: 992px) {
+            .grid-container { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 576px) {
+            .grid-container { grid-template-columns: 1fr; }
+        }
+
+        /* بطاقة المطعم */
         .restaurant-card { 
             background: rgba(15, 23, 42, 0.85); 
             backdrop-filter: blur(12px);
-            margin-bottom: 15px; 
-            padding: 18px; 
+            padding: 20px; 
             border-radius: 16px; 
             cursor: pointer; 
-            text-align: left; 
+            text-align: center; 
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
             border: 1px solid rgba(59, 130, 246, 0.2);
             transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         .restaurant-card:hover {
-            transform: translateY(-3px);
+            transform: translateY(-5px);
             box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
             border-color: rgba(59, 130, 246, 0.6);
         }
 
+        /* صورة بروفايل المطعم دائرية */
+        .profile-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #3b82f6;
+            margin-bottom: 12px;
+        }
+
         .restaurant-info h3 {
-            margin: 0 0 6px 0;
-            font-size: 19px;
+            margin: 0 0 5px 0;
+            font-size: 17px;
             color: #ffffff;
         }
         .restaurant-info p {
             margin: 0;
-            font-size: 14px;
+            font-size: 13px;
             color: #94a3b8;
         }
 
-        /* تفاصيل المينيو وزر الاتصال */
+        /* تفاصيل المينيو وزر الاتصال (تظهر عند الضغط) */
         .details { 
             display: none; 
             margin-top: 15px; 
             border-top: 1px solid rgba(255, 255, 255, 0.1); 
-            padding-top: 14px; 
+            padding-top: 12px; 
             text-align: left; 
+            width: 100%;
         }
         .menu-img { 
             width: 100%; 
-            border-radius: 12px; 
-            margin-top: 10px; 
+            border-radius: 10px; 
+            margin-top: 8px; 
             border: 1px solid rgba(255, 255, 255, 0.1); 
         }
         .phone-btn { 
@@ -120,12 +143,12 @@
             text-align: center; 
             background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); 
             color: white; 
-            padding: 13px; 
-            border-radius: 12px; 
+            padding: 10px; 
+            border-radius: 10px; 
             text-decoration: none; 
-            margin-top: 14px; 
+            margin-top: 10px; 
             font-weight: 700;
-            font-size: 16px;
+            font-size: 14px;
             box-shadow: 0 5px 15px rgba(37, 99, 235, 0.4);
             transition: opacity 0.2s;
         }
@@ -137,6 +160,7 @@
             font-size: 15px; 
             margin-top: 30px; 
             font-weight: 500;
+            grid-column: 1 / -1;
         }
     </style>
 </head>
@@ -151,17 +175,67 @@
         <input type="text" id="wilayaInput" placeholder="Entrez votre Wilaya (ex: Constantine)..." oninput="searchRestaurants()">
     </div>
 
-    <!-- نتائج البحث -->
-    <div id="resultsContainer"></div>
+    <!-- شبكة نتائج البحث -->
+    <div id="resultsContainer" class="grid-container"></div>
 </div>
 
 <script>
-    // قاعدة البيانات (أضف مطاعمك هنا)
+    // قاعدة بيانات تجريبية لـ 8 مطاعم في قسنطينة
     const database = [
         {
-            "name": "Restaurant Les Grillades d'Or",
+            "name": "Le Gourmet Constantine",
             "wilaya": "Constantine",
             "phone": "0600112233",
+            "profileImg": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=200",
+            "menuImage": "https://i.imgur.com/ggFDFrb.jpeg"
+        },
+        {
+            "name": "Fast Food El Gusto",
+            "wilaya": "Constantine",
+            "phone": "0611223344",
+            "profileImg": "https://images.unsplash.com/photo-1543007630-9710e4a00a20?w=200",
+            "menuImage": "https://i.imgur.com/ggFDFrb.jpeg"
+        },
+        {
+            "name": "Pizzeria Roma",
+            "wilaya": "Constantine",
+            "phone": "0622334455",
+            "profileImg": "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=200",
+            "menuImage": "https://i.imgur.com/ggFDFrb.jpeg"
+        },
+        {
+            "name": "Tacos King",
+            "wilaya": "Constantine",
+            "phone": "0633445566",
+            "profileImg": "https://images.unsplash.com/photo-1550547660-d9450f859349?w=200",
+            "menuImage": "https://i.imgur.com/ggFDFrb.jpeg"
+        },
+        {
+            "name": "Grillades du Rocher",
+            "wilaya": "Constantine",
+            "phone": "0644556677",
+            "profileImg": "https://images.unsplash.com/photo-1544025162-d76694265947?w=200",
+            "menuImage": "https://i.imgur.com/ggFDFrb.jpeg"
+        },
+        {
+            "name": "Chawarma El Emir",
+            "wilaya": "Constantine",
+            "phone": "0655667788",
+            "profileImg": "https://images.unsplash.com/photo-1561758033-d89a9ad46330?w=200",
+            "menuImage": "https://i.imgur.com/ggFDFrb.jpeg"
+        },
+        {
+            "name": "Restaurant Cirta",
+            "wilaya": "Constantine",
+            "phone": "0666778899",
+            "profileImg": "https://images.unsplash.com/photo-1537047902294-62a40c20a6ae?w=200",
+            "menuImage": "https://i.imgur.com/ggFDFrb.jpeg"
+        },
+        {
+            "name": "Sandwicherie Express",
+            "wilaya": "Constantine",
+            "phone": "0677889900",
+            "profileImg": "https://images.unsplash.com/photo-1525351484163-7529414344d8?w=200",
             "menuImage": "https://i.imgur.com/ggFDFrb.jpeg"
         }
     ];
@@ -187,9 +261,10 @@
             card.className = "restaurant-card";
             
             card.innerHTML = `
+                <img src="${rest.profileImg}" alt="${rest.name}" class="profile-img">
                 <div class="restaurant-info">
-                    <h3>🍽️ ${rest.name}</h3>
-                    <p>📍 Wilaya : <strong>${rest.wilaya}</strong></p>
+                    <h3>${rest.name}</h3>
+                    <p>📍 ${rest.wilaya}</p>
                 </div>
             `;
             
@@ -197,12 +272,15 @@
             details.className = "details";
             
             details.innerHTML = `
-                <p style="margin: 0 0 8px 0; font-weight: 600; font-size: 14px; color: #e2e8f0;">Menu du Restaurant :</p>
+                <p style="margin: 0 0 6px 0; font-weight: 600; font-size: 13px; color: #e2e8f0;">Menu :</p>
                 <img src="${rest.menuImage}" alt="Menu de ${rest.name}" class="menu-img">
-                <a href="tel:${rest.phone}" class="phone-btn">📞 Appeler pour commander : ${rest.phone}</a>
+                <a href="tel:${rest.phone}" class="phone-btn">📞 ${rest.phone}</a>
             `;
 
-            card.onclick = function() {
+            card.onclick = function(e) {
+                // منع تداخل الأحداث إذا ضغط المستخدم مباشرة على زر الاتصال
+                if(e.target.tagName === 'A') return;
+
                 if(details.style.display === "block") {
                     details.style.display = "none";
                 } else {
@@ -215,9 +293,6 @@
         });
     }
 </script>
-
-<!-- كود الإعلان الخاص بك -->
-<script>(function(s){s.dataset.zone='11513631',s.src='https://al5sm.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 
 </body>
 </html>
