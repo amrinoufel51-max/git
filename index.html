@@ -6,16 +6,24 @@
     <title>DzDelivery - Annuaire des Restaurants</title>
     <style>
         * { box-sizing: border-box; }
+        
+        /* خلفية عصرية متحركة بتموجات بين الأسود والأزرق الداكن */
         body { 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
-            /* خلفية عصرية بتموجات تدرج لونية (Gradients) متناسقة وجذابة */
-            background: linear-gradient(135deg, #ff7e5f 0%, #feb47b 50%, #ff512f 100%);
-            background-attachment: fixed;
+            background: linear-gradient(135deg, #000000, #0f172a, #1e3a8a, #090d16, #000000);
+            background-size: 400% 400%;
+            animation: waveBackground 12s ease infinite;
             margin: 0; 
             padding: 20px 0; 
             direction: ltr; 
-            color: #333;
+            color: #f8fafc;
             min-height: 100vh;
+        }
+
+        @keyframes waveBackground {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         .container { 
@@ -27,24 +35,24 @@
         /* عنوان الموقع الأنيق */
         .site-title {
             text-align: center;
-            color: white;
+            color: #ffffff;
             font-size: 26px;
             font-weight: 800;
             margin-bottom: 25px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            text-shadow: 0 2px 8px rgba(0,0,0,0.5);
         }
 
-        /* صندوق البحث العصري (زجاجي خفيف أو أبيض ناصع مع ظل قوي) */
+        /* صندوق البحث بتصميم زجاجي داكن وعصري */
         .search-box-wrapper {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(12px);
             padding: 14px 18px;
             border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
             display: flex;
             align-items: center;
             margin-bottom: 25px;
-            border: 1px solid rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(59, 130, 246, 0.3);
         }
         .search-box-wrapper input {
             border: none;
@@ -53,42 +61,47 @@
             font-size: 16px;
             background: transparent;
             text-align: left;
-            color: #333;
+            color: #ffffff;
+        }
+        .search-box-wrapper input::placeholder {
+            color: #94a3b8;
         }
 
-        /* بطاقة المطعم بتصميم نظيف وعائم */
+        /* بطاقة المطعم بتصميم داكن وعائم */
         .restaurant-card { 
-            background: rgba(255, 255, 255, 0.95); 
-            backdrop-filter: blur(10px);
+            background: rgba(15, 23, 42, 0.85); 
+            backdrop-filter: blur(12px);
             margin-bottom: 15px; 
             padding: 18px; 
             border-radius: 16px; 
             cursor: pointer; 
             text-align: left; 
-            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s;
         }
         .restaurant-card:hover {
             transform: translateY(-3px);
-            box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+            border-color: rgba(59, 130, 246, 0.6);
         }
 
         .restaurant-info h3 {
             margin: 0 0 6px 0;
             font-size: 19px;
-            color: #111;
+            color: #ffffff;
         }
         .restaurant-info p {
             margin: 0;
             font-size: 14px;
-            color: #666;
+            color: #94a3b8;
         }
 
         /* تفاصيل المينيو وزر الاتصال */
         .details { 
             display: none; 
             margin-top: 15px; 
-            border-top: 1px solid #eee; 
+            border-top: 1px solid rgba(255, 255, 255, 0.1); 
             padding-top: 14px; 
             text-align: left; 
         }
@@ -96,12 +109,12 @@
             width: 100%; 
             border-radius: 12px; 
             margin-top: 10px; 
-            border: 1px solid #ddd; 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
         }
         .phone-btn { 
             display: block; 
             text-align: center; 
-            background: linear-gradient(135deg, #ff512f 0%, #f09819 100%); 
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); 
             color: white; 
             padding: 13px; 
             border-radius: 12px; 
@@ -109,18 +122,17 @@
             margin-top: 14px; 
             font-weight: 700;
             font-size: 16px;
-            box-shadow: 0 5px 15px rgba(255, 81, 47, 0.4);
+            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.4);
             transition: opacity 0.2s;
         }
         .phone-btn:hover { opacity: 0.9; }
         
         .no-result { 
             text-align: center; 
-            color: white; 
+            color: #94a3b8; 
             font-size: 15px; 
             margin-top: 30px; 
             font-weight: 500;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
         }
     </style>
 </head>
@@ -181,7 +193,7 @@
             details.className = "details";
             
             details.innerHTML = `
-                <p style="margin: 0 0 8px 0; font-weight: 600; font-size: 14px; color: #444;">Menu du Restaurant :</p>
+                <p style="margin: 0 0 8px 0; font-weight: 600; font-size: 14px; color: #e2e8f0;">Menu du Restaurant :</p>
                 <img src="${rest.menuImage}" alt="Menu de ${rest.name}" class="menu-img">
                 <a href="tel:${rest.phone}" class="phone-btn">📞 Appeler pour commander : ${rest.phone}</a>
             `;
