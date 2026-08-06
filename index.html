@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BITE - Annuaire des Restaurants</title>
     
+    <!-- كود الإعلان الأول (في الـ Head) -->
+    <script src="https://quge5.com/88/tag.min.js" data-zone="267550" async data-cfasync="false"></script>
+
     <style>
         * { box-sizing: border-box; }
         
@@ -18,6 +21,8 @@
             direction: ltr; 
             color: #f8fafc;
             min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
         }
 
         @keyframes waveBackground {
@@ -25,6 +30,14 @@
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
+
+        /* 5. خلفية الجسيمات المضيئة (Particles) */
+        #particles-js { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+        .particle { position: absolute; background: #ffffff; border-radius: 50%; opacity: 0.2; animation: floatParticle linear infinite; }
+        @keyframes floatParticle { 0% { transform: translateY(100vh) scale(0); } 50% { opacity: 0.5; } 100% { transform: translateY(-50px) scale(1); opacity: 0; } }
+
+        /* 2. شريط التحميل العلوي العصري */
+        #loader { position: fixed; top: 0; left: 0; height: 3px; background: linear-gradient(90deg, #3b82f6, #ec4899); width: 0%; transition: width 0.4s ease-in-out; z-index: 9999; }
 
         .container { 
             max-width: 650px; 
@@ -73,6 +86,7 @@
             gap: 25px;
         }
 
+        /* 4. حواف البطاقات المتدرجة والمتحركة عند مرور الماوس */
         .restaurant-card { 
             background: rgba(15, 23, 42, 0.85); 
             backdrop-filter: blur(12px);
@@ -82,17 +96,31 @@
             text-align: center; 
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
             border: 1px solid rgba(59, 130, 246, 0.25);
-            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
             display: flex;
             flex-direction: column;
             align-items: center;
             width: 100%;
+            position: relative;
+            overflow: hidden;
         }
         .restaurant-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
-            border-color: rgba(59, 130, 246, 0.7);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(59, 130, 246, 0.4);
         }
+        .restaurant-card::before {
+            content: "";
+            position: absolute;
+            inset: -2px;
+            background: conic-gradient(from 0deg at 50% 50%, transparent 0%, #3b82f6 50%, transparent 100%);
+            border-radius: 22px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s;
+            animation: rotateBorder 4s linear infinite;
+        }
+        .restaurant-card:hover::before { opacity: 1; }
+        @keyframes rotateBorder { 100% { transform: rotate(360deg); } }
 
         .profile-img {
             width: 100%;
@@ -121,7 +149,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(8px);
             z-index: 1000;
             justify-content: center;
@@ -189,9 +217,9 @@
             font-weight: 700;
             font-size: 18px;
             box-shadow: 0 5px 20px rgba(37, 99, 235, 0.5);
-            transition: opacity 0.2s;
+            transition: opacity 0.2s, transform 0.2s;
         }
-        .modal-phone-btn:hover { opacity: 0.9; }
+        .modal-phone-btn:hover { opacity: 0.9; transform: scale(1.02); }
 
         .no-result { 
             text-align: center; 
@@ -204,18 +232,26 @@
 </head>
 <body>
 
+<!-- شريط التحميل العلوي المتحرك -->
+<div id="loader"></div>
+
+<!-- خلفية الجسيمات المضيئة -->
+<div id="particles-js"></div>
+
 <div class="container">
     <div class="site-title">BITE</div>
 
-    <!-- ربط خانة البحث بدالة الإعلان عند الضغط عليها -->
+    <!-- خانة البحث (مع إشهار عند النقر) -->
     <div class="search-box-wrapper">
         <span style="margin-left: 10px; font-size: 20px;">🔍</span>
         <input type="text" id="wilayaInput" placeholder="Entrez votre Wilaya (ex: Constantine)..." oninput="searchRestaurants()" onclick="triggerAd()">
     </div>
 
+    <!-- نتائج البحث -->
     <div id="resultsContainer" class="grid-container"></div>
 </div>
 
+<!-- النافذة المنبثقة للمينيو واتصال المطعم -->
 <div id="restaurantModal" class="modal-overlay" onclick="closeModalOnOutside(event)">
     <div class="modal-content">
         <button class="close-btn" onclick="closeModal()">×</button>
@@ -226,19 +262,33 @@
 </div>
 
 <script>
-    // دالة تشغيل الإعلان عند كل نقرة مطلوبة
+    // تشغيل جسيمات الخلفية (فكرة 5)
+    function createParticles() {
+        const container = document.getElementById("particles-js");
+        for (let i = 0; i < 25; i++) {
+            let p = document.createElement("div");
+            p.className = "particle";
+            p.style.left = Math.random() * 100 + "%";
+            p.style.width = p.style.height = (Math.random() * 4 + 2) + "px";
+            p.style.animationDuration = (Math.random() * 6 + 6) + "s";
+            p.style.animationDelay = (Math.random() * 5) + "s";
+            container.appendChild(p);
+        }
+    }
+    createParticles();
+
+    // دالة تشغيل الإعلان الثاني
     function triggerAd() {
         try {
             (function(s){
                 s.dataset.zone='11517801';
                 s.src='https://n6wxm.com/vignette.min.js';
-                [document.documentElement, document.body].filter(Boolean).pop().appendChild(scriptTag);
+                [document.documentElement, document.body].filter(Boolean).pop().appendChild(s);
             })(document.createElement('script'));
-        } catch(e) {
-            // تجاوز أي خطأ محتمل في حال منع متصفحات الإعلانات
-        }
+        } catch(e) {}
     }
 
+    // قاعدة بيانات المطاعم الكاملة
     const database = [
         {
             "name": "Le Gourmet Constantine",
@@ -299,6 +349,11 @@
     ];
 
     function searchRestaurants() {
+        // تأثير شريط التحميل (فكرة 2)
+        let loader = document.getElementById("loader");
+        loader.style.width = "100%";
+        setTimeout(() => { loader.style.width = "0%"; }, 400);
+
         let query = document.getElementById("wilayaInput").value.trim().toLowerCase();
         let container = document.getElementById("resultsContainer");
         container.innerHTML = "";
@@ -326,7 +381,7 @@
                 </div>
             `;
             
-            // عند النقر على بطاقة المطعم: يفتح المينيو + يشغل الإعلان للمرة الثانية
+            // عند النقر على المطعم: يشغل الإعلان + يفتح المينيو بوضوح
             card.onclick = function() {
                 triggerAd();
                 openModal(rest);
