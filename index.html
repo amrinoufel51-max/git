@@ -3,29 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Annuaire des Restaurants - Commande à distance</title>
+    <title>Yassir Food Style - Annuaire des Restaurants</title>
     <style>
-        body { font-family: Tahoma, sans-serif; background: #f9f9f9; margin: 0; padding: 20px; text-align: center; direction: ltr; }
-        .container { max-width: 500px; margin: auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        input { width: 100%; padding: 12px; font-size: 16px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; margin-bottom: 15px; text-align: left; }
-        .restaurant-card { background: #fff3e0; margin: 10px 0; padding: 15px; border-radius: 6px; cursor: pointer; text-align: left; border-left: 5px solid #ff5722; }
-        .details { display: none; margin-top: 10px; background: white; padding: 10px; border-radius: 4px; text-align: left; border: 1px solid #ddd; }
-        .menu-img { width: 100%; border-radius: 6px; margin-top: 10px; border: 1px solid #ddd; }
-        .phone-btn { display: block; text-align: center; background: #4caf50; color: white; padding: 10px; border-radius: 6px; text-decoration: none; margin-top: 10px; font-weight: bold; }
-        .no-result { color: #666; font-style: italic; margin-top: 15px; }
+        * { box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            background: #f4f6f8; 
+            margin: 0; 
+            padding: 0; 
+            direction: ltr; 
+            color: #333;
+        }
+        
+        /* شريط علوي عصري يشبه التطبيقات */
+        .header-bar {
+            background: #ffffff;
+            padding: 15px 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .logo {
+            font-size: 20px;
+            font-weight: 800;
+            color: #ff5722;
+            text-decoration: none;
+        }
+        .logo span { color: #222; }
+
+        .container { 
+            max-width: 480px; 
+            margin: 20px auto; 
+            padding: 0 15px; 
+        }
+
+        /* صندوق البحث العصري */
+        .search-box-wrapper {
+            background: white;
+            padding: 12px 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            border: 1px solid #eaeaea;
+        }
+        .search-box-wrapper input {
+            border: none;
+            outline: none;
+            width: 100%;
+            font-size: 15px;
+            background: transparent;
+            text-align: left;
+        }
+
+        /* بطاقة المطعم بتصميم عائم وظل ناعم */
+        .restaurant-card { 
+            background: #ffffff; 
+            margin-bottom: 15px; 
+            padding: 15px; 
+            border-radius: 14px; 
+            cursor: pointer; 
+            text-align: left; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border: 1px solid #f0f0f0;
+        }
+        .restaurant-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+        }
+
+        .restaurant-info h3 {
+            margin: 0 0 5px 0;
+            font-size: 18px;
+            color: #111;
+        }
+        .restaurant-info p {
+            margin: 0;
+            font-size: 13px;
+            color: #777;
+        }
+
+        /* تفاصيل المينيو وزر الاتصال */
+        .details { 
+            display: none; 
+            margin-top: 15px; 
+            border-top: 1px solid #f0f0f0; 
+            padding-top: 12px; 
+            text-align: left; 
+        }
+        .menu-img { 
+            width: 100%; 
+            border-radius: 10px; 
+            margin-top: 8px; 
+            border: 1px solid #eee; 
+        }
+        .phone-btn { 
+            display: block; 
+            text-align: center; 
+            background: #ff5722; 
+            color: white; 
+            padding: 12px; 
+            border-radius: 10px; 
+            text-decoration: none; 
+            margin-top: 12px; 
+            font-weight: 700;
+            font-size: 15px;
+            box-shadow: 0 4px 10px rgba(255, 87, 34, 0.3);
+            transition: background 0.2s;
+        }
+        .phone-btn:hover { background: #e64a19; }
+        
+        .no-result { 
+            text-align: center; 
+            color: #888; 
+            font-size: 14px; 
+            margin-top: 30px; 
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>Trouvez les restaurants de votre Wilaya 🍔</h2>
-    <input type="text" id="wilayaInput" placeholder="Entrez le nom de la wilaya (ex: Constantine)..." oninput="searchRestaurants()">
+<!-- شريط علوي -->
+<div class="header-bar">
+    <a href="#" class="logo">Yassir<span>Food DZ</span></a>
+    <span style="font-size: 13px; color: #666; font-weight: 600;">📍 Algérie</span>
+</div>
 
-    <div id="resultsContainer" style="margin-top: 20px;"></div>
+<div class="container">
+    <!-- صندوق البحث -->
+    <div class="search-box-wrapper">
+        <span style="margin-left: 10px; font-size: 18px;">🔍</span>
+        <input type="text" id="wilayaInput" placeholder="Entrez votre Wilaya (ex: Constantine)..." oninput="searchRestaurants()">
+    </div>
+
+    <!-- نتائج البحث -->
+    <div id="resultsContainer"></div>
 </div>
 
 <script>
-    // قاعدة البيانات المدمجة (يمكنك إضافة مطاعم جديدة هنا لاحقاً)
+    // قاعدة البيانات (يمكنك إضافة المزيد هنا)
     const database = [
         {
             "name": "Restaurant Les Grillades d'Or",
@@ -41,10 +163,9 @@
         container.innerHTML = "";
 
         if (query === "") {
-            return; // إفراغ النتائج إذا كان حقل البحث فارغاً
+            return;
         }
 
-        // البحث بمرونة يتطابق مع الحروف حتى لو كانت ناقصة أو مختلفة الحالة
         let filtered = database.filter(r => r.wilaya.toLowerCase().includes(query));
 
         if (filtered.length === 0) {
@@ -55,19 +176,30 @@
         filtered.forEach((rest) => {
             let card = document.createElement("div");
             card.className = "restaurant-card";
-            card.innerHTML = `<strong>${rest.name}</strong> (${rest.wilaya})<br><small style="color:#777;">Cliquez pour voir le menu et appeler</small>`;
+            
+            card.innerHTML = `
+                <div class="restaurant-info">
+                    <h3>🍔 ${rest.name}</h3>
+                    <p>📍 Wilaya : <strong>${rest.wilaya}</strong></p>
+                </div>
+            `;
             
             let details = document.createElement("div");
             details.className = "details";
             
             details.innerHTML = `
-                <h4 style="margin: 0 0 5px 0;">Menu du Restaurant :</h4>
+                <p style="margin: 0 0 5px 0; font-weight: 600; font-size: 14px; color: #444;">Menu du Restaurant :</p>
                 <img src="${rest.menuImage}" alt="Menu de ${rest.name}" class="menu-img">
                 <a href="tel:${rest.phone}" class="phone-btn">📞 Appeler pour commander : ${rest.phone}</a>
             `;
 
-            card.onclick = function() {
-                details.style.display = (details.style.display === "block") ? "none" : "block";
+            card.onclick = function(e) {
+                // منع التداخل وجعل الضغط يفتح/يغلق التفاصيل بسلاسة
+                if(details.style.display === "block") {
+                    details.style.display = "none";
+                } else {
+                    details.style.display = "block";
+                }
             };
 
             card.appendChild(details);
