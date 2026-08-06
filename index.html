@@ -28,59 +28,81 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* خلفية الجسيمات المضيئة (Particles) */
+        /* خلفية الجسيمات المضيئة */
         #particles-js { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
         .particle { position: absolute; background: #ffffff; border-radius: 50%; opacity: 0.2; animation: floatParticle linear infinite; }
         @keyframes floatParticle { 0% { transform: translateY(100vh) scale(0); } 50% { opacity: 0.5; } 100% { transform: translateY(-50px) scale(1); opacity: 0; } }
 
-        /* شريط التحميل العلوي العصري */
-        #loader { position: fixed; top: 0; left: 0; height: 3px; background: linear-gradient(90deg, #3b82f6, #ec4899); width: 0%; transition: width 0.4s ease-in-out; z-index: 9999; }
+        /* شريط التحميل العلوي */
+        #loader { position: fixed; top: 0; left: 0; height: 3px; background: linear-gradient(90deg, #3b82f6, #ec4899); width: 0%; transition: width 0.3s ease-in-out; z-index: 9999; }
 
         .container { 
             max-width: 650px; 
             margin: auto; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 85vh;
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* أنيماشن العنوان الحرفي */
-        .site-title {
-            text-align: center;
-            font-size: 48px;
-            font-weight: 900;
-            letter-spacing: 3px;
+        /* حاوية العنوان لتكون في المنتصف ثم تصعد للأعلى */
+        .title-wrapper {
+            position: relative;
             margin-bottom: 25px;
+            animation: moveToTop 0.5s cubic-bezier(0.16, 1, 0.3, 1) 1.2s forwards;
+            text-align: center;
+        }
+
+        @keyframes moveToTop {
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        /* أنيماشن الحروف (تكبير ثم رجوع للحجم الطبيعي مع الهبوط) */
+        .site-title {
+            font-size: 72px; /* حجم كبير في البداية */
+            font-weight: 900;
+            letter-spacing: 4px;
             text-transform: uppercase;
             display: flex;
             justify-content: center;
-            gap: 5px;
+            gap: 8px;
         }
 
         .site-title span {
             display: inline-block;
             opacity: 0;
-            transform: translateY(-50px);
-            animation: dropLetter 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            transform: scale(1.8) translateY(60px);
+            animation: popAndSettle 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
             background: linear-gradient(to right, #fff, #3b82f6);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+            text-shadow: 0 4px 20px rgba(37, 99, 235, 0.4);
         }
 
         .site-title span:nth-child(1) { animation-delay: 0.1s; }
-        .site-title span:nth-child(2) { animation-delay: 0.25s; }
-        .site-title span:nth-child(3) { animation-delay: 0.4s; }
-        .site-title span:nth-child(4) { animation-delay: 0.55s; }
+        .site-title span:nth-child(2) { animation-delay: 0.2s; }
+        .site-title span:nth-child(3) { animation-delay: 0.3s; }
+        .site-title span:nth-child(4) { animation-delay: 0.4s; }
 
-        @keyframes dropLetter {
-            to {
+        @keyframes popAndSettle {
+            0% {
+                opacity: 0;
+                transform: scale(1.8) translateY(80px);
+            }
+            100% {
                 opacity: 1;
-                transform: translateY(0);
+                transform: scale(1) translateY(0);
             }
         }
 
-        /* أنيماشن خانة البحث تصعد من الأسفل */
+        /* خانة البحث تظهر بسرعة وسلاسة */
         .search-box-wrapper {
             width: 100%;
-            margin: 0 auto 35px auto;
+            max-width: 650px;
             background: rgba(15, 23, 42, 0.85);
             backdrop-filter: blur(12px);
             padding: 16px 20px;
@@ -91,12 +113,11 @@
             border: 1px solid rgba(59, 130, 246, 0.3);
             
             opacity: 0;
-            transform: translateY(40px);
-            animation: slideUpSearch 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            animation-delay: 0.8s;
+            transform: translateY(20px);
+            animation: fadeInSearch 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.9s forwards;
         }
 
-        @keyframes slideUpSearch {
+        @keyframes fadeInSearch {
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -120,9 +141,10 @@
             display: flex;
             flex-direction: column;
             gap: 25px;
+            width: 100%;
+            margin-top: 35px;
         }
 
-        /* حواف البطاقات المتدرجة والمتحركة عند مرور الماوس */
         .restaurant-card { 
             background: rgba(15, 23, 42, 0.85); 
             backdrop-filter: blur(12px);
@@ -268,19 +290,18 @@
 </head>
 <body>
 
-<!-- شريط التحميل العلوي المتحرك -->
 <div id="loader"></div>
-
-<!-- خلفية الجسيمات المضيئة -->
 <div id="particles-js"></div>
 
-<div class="container">
-    <!-- العنوان مع أنيماشن الحروف (حرف بحرف) -->
-    <div class="site-title">
-        <span>B</span><span>I</span><span>T</span><span>E</span>
+<div class="container" id="mainContainer">
+    <!-- العنوان بحجم كبير في المنتصف ثم يستقر في الأعلى -->
+    <div class="title-wrapper">
+        <div class="site-title">
+            <span>B</span><span>I</span><span>T</span><span>E</span>
+        </div>
     </div>
 
-    <!-- خانة البحث تصعد من الأسفل بـ Animation -->
+    <!-- خانة البحث تظهر بسلاسة -->
     <div class="search-box-wrapper">
         <span style="margin-left: 10px; font-size: 20px;">🔍</span>
         <input type="text" id="wilayaInput" placeholder="Entrez votre Wilaya (ex: Constantine)..." oninput="searchRestaurants()">
@@ -290,7 +311,7 @@
     <div id="resultsContainer" class="grid-container"></div>
 </div>
 
-<!-- النافذة المنبثقة للمينيو واتصال المطعم -->
+<!-- النافذة المنبثقة -->
 <div id="restaurantModal" class="modal-overlay" onclick="closeModalOnOutside(event)">
     <div class="modal-content">
         <button class="close-btn" onclick="closeModal()">×</button>
@@ -301,7 +322,6 @@
 </div>
 
 <script>
-    // تشغيل جسيمات الخلفية
     function createParticles() {
         const container = document.getElementById("particles-js");
         for (let i = 0; i < 25; i++) {
@@ -316,7 +336,6 @@
     }
     createParticles();
 
-    // قاعدة بيانات المطاعم
     const database = [
         {
             "name": "Le Gourmet Constantine",
@@ -379,15 +398,23 @@
     function searchRestaurants() {
         let loader = document.getElementById("loader");
         loader.style.width = "100%";
-        setTimeout(() => { loader.style.width = "0%"; }, 400);
+        setTimeout(() => { loader.style.width = "0%"; }, 300);
 
         let query = document.getElementById("wilayaInput").value.trim().toLowerCase();
         let container = document.getElementById("resultsContainer");
+        let mainContainer = document.getElementById("mainContainer");
+        
         container.innerHTML = "";
 
         if (query === "") {
+            mainContainer.style.justifyContent = "center";
+            mainContainer.style.minHeight = "85vh";
             return;
         }
+
+        // بمجرد البحث، يرتفع المحتوى قليلاً للأعلى ليترك مساحة للنتائج
+        mainContainer.style.justifyContent = "flex-start";
+        mainContainer.style.minHeight = "unset";
 
         let filtered = database.filter(r => r.wilaya.toLowerCase().includes(query));
 
