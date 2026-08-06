@@ -31,12 +31,12 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* 5. خلفية الجسيمات المضيئة (Particles) */
+        /* خلفية الجسيمات المضيئة (Particles) */
         #particles-js { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
         .particle { position: absolute; background: #ffffff; border-radius: 50%; opacity: 0.2; animation: floatParticle linear infinite; }
         @keyframes floatParticle { 0% { transform: translateY(100vh) scale(0); } 50% { opacity: 0.5; } 100% { transform: translateY(-50px) scale(1); opacity: 0; } }
 
-        /* 2. شريط التحميل العلوي العصري */
+        /* شريط التحميل العلوي العصري */
         #loader { position: fixed; top: 0; left: 0; height: 3px; background: linear-gradient(90deg, #3b82f6, #ec4899); width: 0%; transition: width 0.4s ease-in-out; z-index: 9999; }
 
         .container { 
@@ -86,7 +86,7 @@
             gap: 25px;
         }
 
-        /* 4. حواف البطاقات المتدرجة والمتحركة عند مرور الماوس */
+        /* حواف البطاقات المتدرجة والمتحركة عند مرور الماوس */
         .restaurant-card { 
             background: rgba(15, 23, 42, 0.85); 
             backdrop-filter: blur(12px);
@@ -241,7 +241,7 @@
 <div class="container">
     <div class="site-title">BITE</div>
 
-    <!-- خانة البحث (مع إشهار عند النقر) -->
+    <!-- خانة البحث (مع الإعلان الجديد عند النقر) -->
     <div class="search-box-wrapper">
         <span style="margin-left: 10px; font-size: 20px;">🔍</span>
         <input type="text" id="wilayaInput" placeholder="Entrez votre Wilaya (ex: Constantine)..." oninput="searchRestaurants()" onclick="triggerAd()">
@@ -262,7 +262,7 @@
 </div>
 
 <script>
-    // تشغيل جسيمات الخلفية (فكرة 5)
+    // تشغيل جسيمات الخلفية
     function createParticles() {
         const container = document.getElementById("particles-js");
         for (let i = 0; i < 25; i++) {
@@ -277,18 +277,18 @@
     }
     createParticles();
 
-    // دالة تشغيل الإعلان الثاني
+    // دالة تشغيل الإعلان الجديد بالكونفيكيشن المطلوبة
     function triggerAd() {
         try {
             (function(s){
-                s.dataset.zone='11517801';
-                s.src='https://n6wxm.com/vignette.min.js';
+                s.dataset.zone = '11518544';
+                s.src = 'https://n6wxm.com/vignette.min.js';
                 [document.documentElement, document.body].filter(Boolean).pop().appendChild(s);
             })(document.createElement('script'));
         } catch(e) {}
     }
 
-    // قاعدة بيانات المطاعم الكاملة
+    // قاعدة بيانات المطاعم
     const database = [
         {
             "name": "Le Gourmet Constantine",
@@ -349,7 +349,6 @@
     ];
 
     function searchRestaurants() {
-        // تأثير شريط التحميل (فكرة 2)
         let loader = document.getElementById("loader");
         loader.style.width = "100%";
         setTimeout(() => { loader.style.width = "0%"; }, 400);
@@ -381,7 +380,7 @@
                 </div>
             `;
             
-            // عند النقر على المطعم: يشغل الإعلان + يفتح المينيو بوضوح
+            // عند النقر على المطعم: يشغل الإعلان الجديد + يفتح المينيو
             card.onclick = function() {
                 triggerAd();
                 openModal(rest);
