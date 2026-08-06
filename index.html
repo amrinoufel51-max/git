@@ -26,7 +26,7 @@
         }
 
         .container { 
-            max-width: 1200px; 
+            max-width: 800px; /* تقليص العرض قليلاً لكي تناسب بطاقتين كبيرتين في السطر */
             margin: auto; 
         }
 
@@ -66,29 +66,27 @@
             color: #94a3b8;
         }
 
-        /* شبكة الكاردات: 4 مطاعم في السطر */
+        /* شبكة الكاردات: مطعمين في السطر (2 columns) */
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
         }
 
-        @media (max-width: 992px) {
-            .grid-container { grid-template-columns: repeat(2, 1fr); }
-        }
-        @media (max-width: 576px) {
+        /* للشاشات الصغيرة جداً تصبح بطاقة واحدة في السطر */
+        @media (max-width: 600px) {
             .grid-container { grid-template-columns: 1fr; }
         }
 
         .restaurant-card { 
             background: rgba(15, 23, 42, 0.85); 
             backdrop-filter: blur(12px);
-            padding: 20px; 
-            border-radius: 16px; 
+            padding: 24px; 
+            border-radius: 18px; 
             cursor: pointer; 
             text-align: center; 
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(59, 130, 246, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(59, 130, 246, 0.25);
             transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s;
             display: flex;
             flex-direction: column;
@@ -96,27 +94,28 @@
         }
         .restaurant-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
-            border-color: rgba(59, 130, 246, 0.6);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+            border-color: rgba(59, 130, 246, 0.7);
         }
 
+        /* صورة بروفايل مربعة (Square) بزوايا دائرية */
         .profile-img {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
+            width: 100%;
+            height: 160px;
+            border-radius: 12px;
             object-fit: cover;
-            border: 2px solid #3b82f6;
-            margin-bottom: 12px;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            margin-bottom: 15px;
         }
 
         .restaurant-info h3 {
-            margin: 0 0 5px 0;
-            font-size: 17px;
+            margin: 0 0 6px 0;
+            font-size: 20px;
             color: #ffffff;
         }
         .restaurant-info p {
             margin: 0;
-            font-size: 13px;
+            font-size: 14px;
             color: #94a3b8;
         }
 
@@ -242,56 +241,56 @@
             "name": "Le Gourmet Constantine",
             "wilaya": "Constantine",
             "phone": "0600112233",
-            "profileImg": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=200",
+            "profileImg": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=400",
             "menuImage": "https://i.imgur.com/ggFDFrb.jpeg"
         },
         {
             "name": "Fast Food El Gusto",
             "wilaya": "Constantine",
             "phone": "0611223344",
-            "profileImg": "https://images.unsplash.com/photo-1543007630-9710e4a00a20?w=200",
+            "profileImg": "https://images.unsplash.com/photo-1543007630-9710e4a00a20?w=400",
             "menuImage": "https://i.imgur.com/ggFDFrb.jpeg"
         },
         {
             "name": "Pizzeria Roma",
             "wilaya": "Constantine",
             "phone": "0622334455",
-            "profileImg": "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=200",
+            "profileImg": "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400",
             "menuImage": "https://i.imgur.com/ggFDFrb.jpeg"
         },
         {
             "name": "Tacos King",
             "wilaya": "Constantine",
             "phone": "0633445566",
-            "profileImg": "https://images.unsplash.com/photo-1550547660-d9450f859349?w=200",
+            "profileImg": "https://images.unsplash.com/photo-1550547660-d9450f859349?w=400",
             "menuImage": "https://i.imgur.com/ggFDFrb.jpeg"
         },
         {
             "name": "Grillades du Rocher",
             "wilaya": "Constantine",
             "phone": "0644556677",
-            "profileImg": "https://images.unsplash.com/photo-1544025162-d76694265947?w=200",
+            "profileImg": "https://images.unsplash.com/photo-1544025162-d76694265947?w=400",
             "menuImage": "https://i.imgur.com/ggFDFrb.jpeg"
         },
         {
             "name": "Chawarma El Emir",
             "wilaya": "Constantine",
             "phone": "0655667788",
-            "profileImg": "https://images.unsplash.com/photo-1561758033-d89a9ad46330?w=200",
+            "profileImg": "https://images.unsplash.com/photo-1561758033-d89a9ad46330?w=400",
             "menuImage": "https://i.imgur.com/ggFDFrb.jpeg"
         },
         {
             "name": "Restaurant Cirta",
             "wilaya": "Constantine",
             "phone": "0666778899",
-            "profileImg": "https://images.unsplash.com/photo-1537047902294-62a40c20a6ae?w=200",
+            "profileImg": "https://images.unsplash.com/photo-1537047902294-62a40c20a6ae?w=400",
             "menuImage": "https://i.imgur.com/ggFDFrb.jpeg"
         },
         {
             "name": "Sandwicherie Express",
             "wilaya": "Constantine",
             "phone": "0677889900",
-            "profileImg": "https://images.unsplash.com/photo-1525351484163-7529414344d8?w=200",
+            "profileImg": "https://images.unsplash.com/photo-1525351484163-7529414344d8?w=400",
             "menuImage": "https://i.imgur.com/ggFDFrb.jpeg"
         }
     ];
@@ -324,7 +323,6 @@
                 </div>
             `;
             
-            // عند الضغط على الكارد، تفتح النافذة الكبيرة في الوسط
             card.onclick = function() {
                 openModal(rest);
             };
@@ -349,7 +347,6 @@
 
     function closeModalOnOutside(event) {
         let modalContent = document.querySelector(".modal-content");
-        // إذا ضغط المستخدم خارج الصندوق الأسود، تُغلق النافذة
         if (!modalContent.contains(event.target)) {
             closeModal();
         }
