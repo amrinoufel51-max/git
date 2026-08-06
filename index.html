@@ -5,9 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BITE - Annuaire des Restaurants</title>
     
-    <!-- كود الإعلان الجديد -->
-    <script>(function(s){s.dataset.zone='11517801',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
-
     <style>
         * { box-sizing: border-box; }
         
@@ -210,9 +207,10 @@
 <div class="container">
     <div class="site-title">BITE</div>
 
+    <!-- ربط خانة البحث بدالة الإعلان عند الضغط عليها -->
     <div class="search-box-wrapper">
         <span style="margin-left: 10px; font-size: 20px;">🔍</span>
-        <input type="text" id="wilayaInput" placeholder="Entrez votre Wilaya (ex: Constantine)..." oninput="searchRestaurants()">
+        <input type="text" id="wilayaInput" placeholder="Entrez votre Wilaya (ex: Constantine)..." oninput="searchRestaurants()" onclick="triggerAd()">
     </div>
 
     <div id="resultsContainer" class="grid-container"></div>
@@ -228,6 +226,19 @@
 </div>
 
 <script>
+    // دالة تشغيل الإعلان عند كل نقرة مطلوبة
+    function triggerAd() {
+        try {
+            (function(s){
+                s.dataset.zone='11517801';
+                s.src='https://n6wxm.com/vignette.min.js';
+                [document.documentElement, document.body].filter(Boolean).pop().appendChild(scriptTag);
+            })(document.createElement('script'));
+        } catch(e) {
+            // تجاوز أي خطأ محتمل في حال منع متصفحات الإعلانات
+        }
+    }
+
     const database = [
         {
             "name": "Le Gourmet Constantine",
@@ -315,7 +326,9 @@
                 </div>
             `;
             
+            // عند النقر على بطاقة المطعم: يفتح المينيو + يشغل الإعلان للمرة الثانية
             card.onclick = function() {
+                triggerAd();
                 openModal(rest);
             };
 
