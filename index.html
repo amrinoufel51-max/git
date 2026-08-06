@@ -26,7 +26,7 @@
         }
 
         .container { 
-            max-width: 1200px; /* توسيع العرض لاستيعاب 4 كاردات في السطر */
+            max-width: 1200px; 
             margin: auto; 
         }
 
@@ -66,14 +66,13 @@
             color: #94a3b8;
         }
 
-        /* نظام الشبكة: 4 كاردات في السطر بالشاشات الكبيرة */
+        /* شبكة الكاردات: 4 مطاعم في السطر */
         .grid-container {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 20px;
         }
 
-        /* استجابة الشاشات المتوسطة والصغيرة */
         @media (max-width: 992px) {
             .grid-container { grid-template-columns: repeat(2, 1fr); }
         }
@@ -81,7 +80,6 @@
             .grid-container { grid-template-columns: 1fr; }
         }
 
-        /* بطاقة المطعم */
         .restaurant-card { 
             background: rgba(15, 23, 42, 0.85); 
             backdrop-filter: blur(12px);
@@ -102,7 +100,6 @@
             border-color: rgba(59, 130, 246, 0.6);
         }
 
-        /* صورة بروفايل المطعم دائرية */
         .profile-img {
             width: 80px;
             height: 80px;
@@ -123,37 +120,86 @@
             color: #94a3b8;
         }
 
-        /* تفاصيل المينيو وزر الاتصال (تظهر عند الضغط) */
-        .details { 
-            display: none; 
-            margin-top: 15px; 
-            border-top: 1px solid rgba(255, 255, 255, 0.1); 
-            padding-top: 12px; 
-            text-align: left; 
+        /* تصميم النافذة الكبيرة المنبثقة في وسط الشاشة (Modal) */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
         }
-        .menu-img { 
-            width: 100%; 
-            border-radius: 10px; 
-            margin-top: 8px; 
-            border: 1px solid rgba(255, 255, 255, 0.1); 
+
+        .modal-content {
+            background: #0f172a;
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            max-width: 600px;
+            width: 100%;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+            text-align: center;
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
         }
-        .phone-btn { 
-            display: block; 
-            text-align: center; 
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); 
-            color: white; 
-            padding: 10px; 
-            border-radius: 10px; 
-            text-decoration: none; 
-            margin-top: 10px; 
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            font-size: 20px;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+        .close-btn:hover { background: rgba(255, 255, 255, 0.2); }
+
+        .modal-title {
+            font-size: 24px;
+            color: #ffffff;
+            margin: 0 0 15px 0;
+        }
+
+        .modal-menu-img {
+            width: 100%;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-height: 400px;
+            object-fit: contain;
+            background: #000;
+        }
+
+        .modal-phone-btn {
+            display: block;
+            text-align: center;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: white;
+            padding: 14px;
+            border-radius: 12px;
+            text-decoration: none;
+            margin-top: 20px;
             font-weight: 700;
-            font-size: 14px;
-            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.4);
+            font-size: 18px;
+            box-shadow: 0 5px 20px rgba(37, 99, 235, 0.5);
             transition: opacity 0.2s;
         }
-        .phone-btn:hover { opacity: 0.9; }
-        
+        .modal-phone-btn:hover { opacity: 0.9; }
+
         .no-result { 
             text-align: center; 
             color: #94a3b8; 
@@ -177,6 +223,16 @@
 
     <!-- شبكة نتائج البحث -->
     <div id="resultsContainer" class="grid-container"></div>
+</div>
+
+<!-- النافذة المنبثقة الكبيرة في المنتصف (Modal) -->
+<div id="restaurantModal" class="modal-overlay" onclick="closeModalOnOutside(event)">
+    <div class="modal-content">
+        <button class="close-btn" onclick="closeModal()">×</button>
+        <h2 id="modalName" class="modal-title"></h2>
+        <img id="modalMenuImg" src="" alt="Menu" class="modal-menu-img">
+        <a id="modalPhoneBtn" href="" class="modal-phone-btn">📞 Appeler pour commander</a>
+    </div>
 </div>
 
 <script>
@@ -268,29 +324,35 @@
                 </div>
             `;
             
-            let details = document.createElement("div");
-            details.className = "details";
-            
-            details.innerHTML = `
-                <p style="margin: 0 0 6px 0; font-weight: 600; font-size: 13px; color: #e2e8f0;">Menu :</p>
-                <img src="${rest.menuImage}" alt="Menu de ${rest.name}" class="menu-img">
-                <a href="tel:${rest.phone}" class="phone-btn">📞 ${rest.phone}</a>
-            `;
-
-            card.onclick = function(e) {
-                // منع تداخل الأحداث إذا ضغط المستخدم مباشرة على زر الاتصال
-                if(e.target.tagName === 'A') return;
-
-                if(details.style.display === "block") {
-                    details.style.display = "none";
-                } else {
-                    details.style.display = "block";
-                }
+            // عند الضغط على الكارد، تفتح النافذة الكبيرة في الوسط
+            card.onclick = function() {
+                openModal(rest);
             };
 
-            card.appendChild(details);
             container.appendChild(card);
         });
+    }
+
+    function openModal(rest) {
+        document.getElementById("modalName").innerText = rest.name;
+        document.getElementById("modalMenuImg").src = rest.menuImage;
+        let phoneBtn = document.getElementById("modalPhoneBtn");
+        phoneBtn.href = "tel:" + rest.phone;
+        phoneBtn.innerText = "📞 Appeler pour commander : " + rest.phone;
+
+        document.getElementById("restaurantModal").style.display = "flex";
+    }
+
+    function closeModal() {
+        document.getElementById("restaurantModal").style.display = "none";
+    }
+
+    function closeModalOnOutside(event) {
+        let modalContent = document.querySelector(".modal-content");
+        // إذا ضغط المستخدم خارج الصندوق الأسود، تُغلق النافذة
+        if (!modalContent.contains(event.target)) {
+            closeModal();
+        }
     }
 </script>
 
