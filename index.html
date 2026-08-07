@@ -271,7 +271,6 @@
 
     <div class="search-box-wrapper">
         <span style="margin-right: 10px; font-size: 20px;">🔍</span>
-        <!-- التعديل هنا: البحث يخدم مباشرة بمجرد كتابة أول الحروف -->
         <input type="text" id="wilayaInput" placeholder="Entrez votre Wilaya (ex: se, alger)..." oninput="searchRestaurants()">
     </div>
 
@@ -310,6 +309,11 @@
 
     let currentMenuImages = [];
     let currentImageIndex = 0;
+    
+    // متغيرات التحميل التدريجي (Pagination)
+    let allRestaurants = [];
+    let displayedCount = 0;
+    const batchSize = 10; // عدد المطاعم التي تظهر في كل مرة تنزل فيها للأسفل
 
     function createParticles() {
         const container = document.getElementById("particles-js");
@@ -336,6 +340,8 @@
         let mainContainer = document.getElementById("mainContainer");
         
         container.innerHTML = "";
+        allRestaurants = [];
+        displayedCount = 0;
 
         if (query === "") {
             loader.style.width = "0%";
@@ -347,7 +353,6 @@
         mainContainer.style.justifyContent = "flex-start";
         mainContainer.style.minHeight = "unset";
 
-        // التعديل هنا: `.startsWith` أو `.includes` تجعل البحث يبدأ بمجرد كتابة أول الحروف (مثل "se" تبحث عن "setif")
         let matchedWilaya = wilayasList.find(w => w.startsWith(formattedQuery) || w.includes(formattedQuery));
 
         if (!matchedWilaya) {
@@ -365,33 +370,57 @@
                 return;
             }
 
-            let restaurants = await response.json();
+            allRestaurants = await response.json();
             loader.style.width = "0%";
 
-            restaurants.forEach((rest) => {
-                let card = document.createElement("div");
-                card.className = "restaurant-card";
-                
-                card.innerHTML = `
-                    <img src="${rest.profileImg}" alt="${rest.name}" class="profile-img">
-                    <div class="restaurant-info">
-                        <h3>${rest.name}</h3>
-                        <p>📍 ${matchedWilaya.toUpperCase()}</p>
-                    </div>
-                `;
-                
-                card.onclick = function() {
-                    openModal(rest);
-                };
-
-                container.appendChild(card);
-            });
+            // عرض الدفعة الأولى من المطاعم
+            renderMoreRestaurants(matchedWilaya);
 
         } catch (error) {
             loader.style.width = "0%";
             container.innerHTML = "<p class='no-result'>Erreur de chargement.</p>";
         }
     }
+
+    // دالة لعرض المطاعم تدريجياً
+    function renderMoreRestaurants(wilayaName) {
+        let container = document.getElementById("resultsContainer");
+        let nextBatch = allRestaurants.slice(displayedCount, displayedCount + batchSize);
+
+        nextBatch.forEach((rest) => {
+            let card = document.createElement("div");
+            card.className = "restaurant-card";
+            
+            card.innerHTML = `
+                <img src="${rest.profileImg}" alt="${rest.name}" class="profile-img" loading="lazy">
+                <div class="restaurant-info">
+                    <h3>${rest.name}</h3>
+                    <p>📍 ${wilayaName.toUpperCase()}</p>
+                </div>
+            `;
+            
+            card.onclick = function() {
+                openModal(rest);
+            };
+
+            container.appendChild(card);
+        });
+
+        displayedCount += nextBatch.length;
+    }
+
+    // مراقبة النزول لأسفل الصفحة لتحميل المزيد تلقائياً (Infinite Scroll)
+    window.addEventListener("scroll", () => {
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 300) {
+            let query = document.getElementById("wilayaInput").value.trim().toLowerCase();
+            let formattedQuery = query.replace(/\s+/g, "_");
+            let matchedWilaya = wilayasList.find(w => w.startsWith(formattedQuery) || w.includes(formattedQuery));
+            
+            if (matchedWilaya && displayedCount < allRestaurants.length) {
+                renderMoreRestaurants(matchedWilaya);
+            }
+        }
+    });
 
     function openModal(rest) {
         document.getElementById("modalName").innerText = rest.name;
