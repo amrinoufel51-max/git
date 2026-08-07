@@ -1,0 +1,10 @@
+{
+  wilaya: "skikda",
+  name: "cor dor",
+  phone: "031 00 00 00",
+  profilePhoto: "https://example.com/images/profile.jpg",
+  menuImages: [
+    "https://example.com/images/menu1.jpg",
+    "https://example.com/images/menu2.jpg"
+  ]
+}
