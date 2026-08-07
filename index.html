@@ -335,7 +335,7 @@
 </div>
 
 <script>
-    // إعدادات الاتصال بـ Supabase (ضع معلومات مشروعك هنا)
+    // استبدل هذه القيم بمعلومات مشروعك الحقيقية من Supabase
     const SUPABASE_URL = 'YOUR_SUPABASE_URL';
     const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -377,7 +377,6 @@
         mainContainer.style.justifyContent = "flex-start";
         mainContainer.style.minHeight = "unset";
 
-        // جلب المطاعم من سحابة Supabase بناءً على الولاية المدخلة
         let { data: restaurants, error } = await supabaseClient
             .from('restaurants')
             .select('*')
@@ -412,8 +411,16 @@
 
     function openModal(rest) {
         document.getElementById("modalName").innerText = rest.name;
-        // افتراض أن حقل menu_images في قاعدة البيانات عبارة عن مصفوفة صور
-        currentImages = rest.menu_images || [rest.profile_img];
+        
+        // معالجة صور السلايدر سواء كانت نص مفصول بفاصلة أو مصفوفة
+        if (typeof rest.menu_images === 'string') {
+            currentImages = rest.menu_images.split(',').map(img => img.trim());
+        } else if (Array.isArray(rest.menu_images)) {
+            currentImages = rest.menu_images;
+        } else {
+            currentImages = [rest.profile_img];
+        }
+
         currentSlide = 0;
         updateSlider();
 
