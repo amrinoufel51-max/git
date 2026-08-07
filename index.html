@@ -224,7 +224,7 @@
 
     <div class="search-box-wrapper">
         <span style="margin-left: 10px; font-size: 20px;">🔍</span>
-        <input type="text" id="wilayaInput" placeholder="Entrez votre Wilaya (ex: Constantine)..." oninput="searchRestaurants()">
+        <input type="text" id="wilayaInput" placeholder="Entrez votre Wilaya (ex: alger, oran, setif...)" oninput="searchRestaurants()">
     </div>
 
     <div id="resultsContainer" class="grid-container"></div>
@@ -239,10 +239,23 @@
     </div>
 </div>
 
-<!-- استدعاء ملف المطاعم الخارجي هنا -->
-<script src="database.js"></script>
+<!-- استدعاء ملفات الولايات الخمسة -->
+<script src="alger.js"></script>
+<script src="oran.js"></script>
+<script src="constantine.js"></script>
+<script src="setif.js"></script>
+<script src="skikda.js"></script>
 
 <script>
+    // تجميع البيانات من الملفات الخارجية تلقائياً حسب المتغيرات المعتمدة
+    const database = [
+        ...(typeof algerData !== 'undefined' ? algerData : []),
+        ...(typeof oranData !== 'undefined' ? oranData : []),
+        ...(typeof constantineData !== 'undefined' ? constantineData : []),
+        ...(typeof setifData !== 'undefined' ? setifData : []),
+        ...(typeof skikdaData !== 'undefined' ? skikdaData : [])
+    ];
+
     function createParticles() {
         const container = document.getElementById("particles-js");
         for (let i = 0; i < 25; i++) {
@@ -277,7 +290,6 @@
         mainContainer.style.justifyContent = "flex-start";
         mainContainer.style.minHeight = "unset";
 
-        // متغير database يجي مباشرة من الملف الخارجي database.js
         let filtered = database.filter(r => r.wilaya.toLowerCase().includes(query));
 
         if (filtered.length === 0) {
@@ -289,6 +301,9 @@
             let card = document.createElement("div");
             card.className = "restaurant-card";
             
+            // دعم الخاصية في حال كانت الصورة الأولى في مصفوفة المنيو أو صورة مباشرة
+            let menuImageSrc = rest.menuImage || (rest.menus && rest.menus.length > 0 ? rest.menus[0] : '');
+
             card.innerHTML = `
                 <img src="${rest.profileImg}" alt="${rest.name}" class="profile-img">
                 <div class="restaurant-info">
@@ -298,7 +313,7 @@
             `;
             
             card.onclick = function() {
-                openModal(rest);
+                openModal({ ...rest, menuImage: menuImageSrc });
             };
 
             container.appendChild(card);
