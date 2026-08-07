@@ -332,8 +332,7 @@
 </div>
 
 <script>
-    const SUPABASE_URL = 'https://cvzalanflgimiqbsfqex.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN2emFsYW5mbGdpbWlxYnNmcWV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYxMTE2ODYsImV4cCI6MjEwMTY4NzY4Nn0.sosUzZzXAkm3MSdM7jSbTqgneXipFySJVI2NymAkWM4';
+    let cachedRestaurants = null;
 
     function createParticles() {
         const container = document.getElementById("particles-js");
@@ -354,9 +353,9 @@
 
     async function searchRestaurants() {
         let loader = document.getElementById("loader");
-        loader.style.width = "100%";
+        loader.style.width = "50%";
         
-        let query = document.getElementById("wilayaInput").value.trim();
+        let query = document.getElementById("wilayaInput").value.trim().toLowerCase();
         let container = document.getElementById("resultsContainer");
         let mainContainer = document.getElementById("mainContainer");
         
@@ -373,23 +372,19 @@
         mainContainer.style.minHeight = "unset";
 
         try {
-            // استخدام % بدل * لتتوافق مع معايير Supabase ilike
-            let response = await fetch(`${SUPABASE_URL}/rest/v1/restaurants?wilaya=ilike.%25${encodeURIComponent(query)}%25&select=*`, {
-                headers: {
-                    'apikey': SUPABASE_ANON_KEY,
-                    'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
-                }
-            });
-
-            loader.style.width = "0%";
-
-            if (!response.ok) {
-                throw new Error('Erreur HTTP: ' + response.status);
+            // تحميل ملف JSON الخارجي مرة واحدة فقط والاحتفاظ به في الذاكرة لسرعة فائقة
+            if (!cachedRestaurants) {
+                let response = await fetch('restaurants.json');
+                if (!response.ok) throw new Error("Erreur de chargement du fichier JSON");
+                cachedRestaurants = await response.json();
             }
 
-            let restaurants = await response.json();
+            loader.style.width = "100%";
+            setTimeout(() => { loader.style.width = "0%"; }, 200);
 
-            if (!restaurants || restaurants.length === 0) {
+            let restaurants = cachedRestaurants.filter(r => r.wilaya.toLowerCase().includes(query));
+
+            if (restaurants.length === 0) {
                 container.innerHTML = "<p class='no-result'>Aucun restaurant trouvé pour cette wilaya.</p>";
                 return;
             }
@@ -399,10 +394,10 @@
                 card.className = "restaurant-card";
                 
                 card.innerHTML = `
-                    <img src="${rest.profile_img || ''}" alt="${rest.name || ''}" class="profile-img">
+                    <img src="${rest.profile_img}" alt="${rest.name}" class="profile-img">
                     <div class="restaurant-info">
-                        <h3>${rest.name || ''}</h3>
-                        <p>📍 ${rest.wilaya || ''}</p>
+                        <h3>${rest.name}</h3>
+                        <p>📍 ${rest.wilaya}</p>
                     </div>
                 `;
                 
@@ -412,9 +407,10 @@
 
                 container.appendChild(card);
             });
+
         } catch (err) {
             loader.style.width = "0%";
-            console.error("Fetch Error:", err);
+            console.error("Erreur:", err);
             container.innerHTML = `<p class='no-result' style="color: #ef4444;">Erreur de chargement des données.</p>`;
         }
     }
@@ -424,8 +420,6 @@
         
         if (typeof rest.menu_images === 'string') {
             currentImages = rest.menu_images.split(',').map(img => img.trim());
-        } else if (Array.isArray(rest.menu_images)) {
-            currentImages = rest.menu_images;
         } else {
             currentImages = [rest.profile_img];
         }
@@ -479,8 +473,8 @@
         let track = document.getElementById("sliderTrack");
         track.style.transform = `translateX(-${currentSlide * 100}%)`;
 
-        let dots = document.querySelectorAll(".slider-dots .dot");
-        dots.forEach((dot, index) => {
+        $dots = document.querySelectorAll(".slider-dots .dot");
+        $dots.forEach((dot, index) => {
             dot.classList.toggle("active", index === currentSlide);
         });
     }
