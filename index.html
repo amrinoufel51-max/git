@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BITE - الدليل الرقمي للمطاعم والحلويات</title>
+    <title>BITE - الدليل الرقمي</title>
     <style>
         :root {
             --primary-color: #ff4757;
@@ -134,6 +134,7 @@
             margin-bottom: 12px;
         }
 
+        /* تنسيق الـ Slider العصري والخفيف للمنيو */
         .menu-slider-container {
             margin-top: 10px;
             border-top: 1px solid #f1f2f6;
@@ -208,26 +209,21 @@
 
     <header>
         <h1>BITE</h1>
-        <p>دليلك الأول للمطاعم، الحلويات، والمشاريع المنزلية في الجزائر</p>
+        <p>دليلك الأول للمطاعم، الحلويات، والمشاريع المنزلية</p>
     </header>
 
     <div class="container">
-        <!-- شريط البحث والتصفية -->
+        <!-- شريط البحث والتصفية (نفس الشكل الأصلي البسيط) -->
         <div class="search-filters">
             <input type="text" id="searchInput" placeholder="ابحث باسم المطعم أو الأكل..." oninput="filterData()">
             
             <select id="wilayaFilter" onchange="filterData()">
-                <option value="">كل الولايات الكبرى</option>
+                <option value="">كل الولايات</option>
+                <option value="سطيف">سطيف</option>
+                <option value="سكيكدة">سكيكدة</option>
+                <option value="قسنطينة">قسنطينة</option>
                 <option value="الجزائر العاصمة">الجزائر العاصمة</option>
                 <option value="وهران">وهران</option>
-                <option value="قسنطينة">قسنطينة</option>
-                <option value="سطيف">سطيف</option>
-                <option value="البليدة">البليدة</option>
-                <option value="تيزي وزو">تيزي وزو</option>
-                <option value="عنابة">عنابة</option>
-                <option value="باتنة">باتنة</option>
-                <option value="تلمسان">تلمسان</option>
-                <option value="الجلفة">الجلفة</option>
             </select>
 
             <select id="categoryFilter" onchange="filterData()">
@@ -238,34 +234,25 @@
             </select>
         </div>
 
+        <!-- شبكة البطاقات -->
         <div class="grid-cards" id="cardsContainer"></div>
     </div>
 
-    <!-- استدعاء ملفات الولايات الـ 10 -->
+    <!-- استدعاء ملفات الولايات الخاصة بك -->
+    <script src="setif.js"></script>
+    <script src="skikda.js"></script>
+    <script src="constantine.js"></script>
     <script src="alger.js"></script>
     <script src="oran.js"></script>
-    <script src="constantine.js"></script>
-    <script src="setif.js"></script>
-    <script src="blida.js"></script>
-    <script src="tiziouzou.js"></script>
-    <script src="annaba.js"></script>
-    <script src="batna.js"></script>
-    <script src="tlemcen.js"></script>
-    <script src="djelfa.js"></script>
 
-    <!-- ملف التجميع والمنطق البرمجي -->
+    <!-- منطق البحث وعرض البيانات -->
     <script>
         const database = [
-            ...(typeof algerData !== 'undefined' ? algerData : []),
-            ...(typeof oranData !== 'undefined' ? oranData : []),
-            ...(typeof constantineData !== 'undefined' ? constantineData : []),
             ...(typeof setifData !== 'undefined' ? setifData : []),
-            ...(typeof blidaData !== 'undefined' ? blidaData : []),
-            ...(typeof tiziouzouData !== 'undefined' ? tiziouzouData : []),
-            ...(typeof annabaData !== 'undefined' ? annabaData : []),
-            ...(typeof batnaData !== 'undefined' ? batnaData : []),
-            ...(typeof tlemcenData !== 'undefined' ? tlemcenData : []),
-            ...(typeof djelfaData !== 'undefined' ? djelfaData : [])
+            ...(typeof skikdaData !== 'undefined' ? skikdaData : []),
+            ...(typeof constantineData !== 'undefined' ? constantineData : []),
+            ...(typeof algerData !== 'undefined' ? algerData : []),
+            ...(typeof oranData !== 'undefined' ? oranData : [])
         ];
 
         function renderCards(dataToDisplay) {
