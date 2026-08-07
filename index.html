@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BITE - Annuaire des Restaurants</title>
 
+    <!-- استدعاء مكتبة Supabase للاتصال بالسحابة -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <style>
         * { box-sizing: border-box; }
         
@@ -170,7 +173,6 @@
         .restaurant-info h3 { margin: 0 0 8px 0; font-size: 24px; color: #ffffff; }
         .restaurant-info p { margin: 0; font-size: 16px; color: #94a3b8; }
 
-        /* تصميم نافذة المينيو مع السلايدر */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -214,7 +216,6 @@
 
         .modal-title { font-size: 26px; color: #ffffff; margin: 0 0 15px 0; }
 
-        /* ستايل السلايدر الجديد */
         .slider-container {
             position: relative;
             width: 100%;
@@ -244,7 +245,6 @@
             object-fit: contain;
         }
 
-        /* أزرار التنقل يمين ويسار في السلايدر */
         .slider-btn {
             position: absolute;
             top: 50%;
@@ -263,7 +263,6 @@
         .prev-btn { left: 10px; }
         .next-btn { right: 10px; }
 
-        /* نقاط المؤشر تحت السلايدر */
         .slider-dots {
             display: flex;
             justify-content: center;
@@ -318,7 +317,6 @@
     <div id="resultsContainer" class="grid-container"></div>
 </div>
 
-<!-- النافذة المنبثقة مع السلايدر -->
 <div id="restaurantModal" class="modal-overlay" onclick="closeModalOnOutside(event)">
     <div class="modal-content">
         <button class="close-btn" onclick="closeModal()">×</button>
@@ -337,6 +335,11 @@
 </div>
 
 <script>
+    // إعدادات الاتصال بـ Supabase (ضع معلومات مشروعك هنا)
+    const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+    const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
     function createParticles() {
         const container = document.getElementById("particles-js");
         for (let i = 0; i < 25; i++) {
@@ -351,46 +354,21 @@
     }
     createParticles();
 
-    // قاعدة بيانات تجريبية (ملاحظة: menuImages هنا عبارة عن مصفوفة فيها عدة صور للمينيو)
-    const database = [
-        {
-            "name": "Le Gourmet Constantine",
-            "wilaya": "Constantine",
-            "phone": "0600112233",
-            "profileImg": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=700",
-            "menuImages": [
-                "https://i.imgur.com/ggFDFrb.jpeg",
-                "https://images.unsplash.com/photo-1544025162-d76694265947?w=700",
-                "https://images.unsplash.com/photo-1550547660-d9450f859349?w=700"
-            ]
-        },
-        {
-            "name": "Fast Food El Gusto",
-            "wilaya": "Constantine",
-            "phone": "0611223344",
-            "profileImg": "https://images.unsplash.com/photo-1543007630-9710e4a00a20?w=700",
-            "menuImages": [
-                "https://i.imgur.com/ggFDFrb.jpeg",
-                "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=700"
-            ]
-        }
-    ];
-
     let currentSlide = 0;
     let currentImages = [];
 
-    function searchRestaurants() {
+    async function searchRestaurants() {
         let loader = document.getElementById("loader");
         loader.style.width = "100%";
-        setTimeout(() => { loader.style.width = "0%"; }, 300);
-
-        let query = document.getElementById("wilayaInput").value.trim().toLowerCase();
+        
+        let query = document.getElementById("wilayaInput").value.trim();
         let container = document.getElementById("resultsContainer");
         let mainContainer = document.getElementById("mainContainer");
         
         container.innerHTML = "";
 
         if (query === "") {
+            loader.style.width = "0%";
             mainContainer.style.justifyContent = "center";
             mainContainer.style.minHeight = "80vh";
             return;
@@ -399,19 +377,25 @@
         mainContainer.style.justifyContent = "flex-start";
         mainContainer.style.minHeight = "unset";
 
-        let filtered = database.filter(r => r.wilaya.toLowerCase().includes(query));
+        // جلب المطاعم من سحابة Supabase بناءً على الولاية المدخلة
+        let { data: restaurants, error } = await supabaseClient
+            .from('restaurants')
+            .select('*')
+            .ilike('wilaya', `%${query}%`);
 
-        if (filtered.length === 0) {
+        loader.style.width = "0%";
+
+        if (error || !restaurants || restaurants.length === 0) {
             container.innerHTML = "<p class='no-result'>Aucun restaurant trouvé pour cette wilaya.</p>";
             return;
         }
 
-        filtered.forEach((rest) => {
+        restaurants.forEach((rest) => {
             let card = document.createElement("div");
             card.className = "restaurant-card";
             
             card.innerHTML = `
-                <img src="${rest.profileImg}" alt="${rest.name}" class="profile-img">
+                <img src="${rest.profile_img}" alt="${rest.name}" class="profile-img">
                 <div class="restaurant-info">
                     <h3>${rest.name}</h3>
                     <p>📍 ${rest.wilaya}</p>
@@ -428,7 +412,8 @@
 
     function openModal(rest) {
         document.getElementById("modalName").innerText = rest.name;
-        currentImages = rest.menuImages;
+        // افتراض أن حقل menu_images في قاعدة البيانات عبارة عن مصفوفة صور
+        currentImages = rest.menu_images || [rest.profile_img];
         currentSlide = 0;
         updateSlider();
 
