@@ -335,7 +335,6 @@
 </div>
 
 <script>
-    // الرابط والمفتاح الخاص بك مدرجان هنا بدقة:
     const SUPABASE_URL = 'https://cvzalanflgimiqbsfqex.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_fRM0FbDdlav6uuKM8hPkxA_ccQcfjLZ';
     
@@ -378,6 +377,9 @@
         mainContainer.style.justifyContent = "flex-start";
         mainContainer.style.minHeight = "unset";
 
+        console.log("جارٍ البحث عن الولاية:", query);
+
+        // جلب البيانات من Supabase مع تسجيل النتيجة في الـ Console
         let { data: restaurants, error } = await supabaseClient
             .from('restaurants')
             .select('*')
@@ -385,7 +387,15 @@
 
         loader.style.width = "0%";
 
-        if (error || !restaurants || restaurants.length === 0) {
+        console.log("البيانات المسترجعة:", restaurants);
+        console.log("خطأ إن وجد:", error);
+
+        if (error) {
+            container.innerHTML = `<p class='no-result' style="color: #ef4444;">خطأ في الاتصال: ${error.message}</p>`;
+            return;
+        }
+
+        if (!restaurants || restaurants.length === 0) {
             container.innerHTML = "<p class='no-result'>Aucun restaurant trouvé pour cette wilaya.</p>";
             return;
         }
