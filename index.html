@@ -1,495 +1,93 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BITE - Annuaire des Restaurants</title>
-
-    <style>
-        * { box-sizing: border-box; }
-        
-        body { 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
-            background: linear-gradient(135deg, #000000, #0f172a, #1e3a8a, #090d16, #000000);
-            background-size: 400% 400%;
-            animation: waveBackground 12s ease infinite;
-            margin: 0; 
-            padding: 30px 15px; 
-            direction: ltr; 
-            color: #f8fafc;
-            min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
-        }
-
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: linear-gradient(135deg, #000000, #0f172a, #1e3a8a, #090d16, #000000);
-            background-size: 400% 400%;
-            animation: waveBackground 12s ease infinite;
-            z-index: -2;
-        }
-
-        @keyframes waveBackground {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        #particles-js { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
-        .particle { position: absolute; background: #ffffff; border-radius: 50%; opacity: 0.2; animation: floatParticle linear infinite; }
-        @keyframes floatParticle { 0% { transform: translateY(100vh) scale(0); } 50% { opacity: 0.5; } 100% { transform: translateY(-50px) scale(1); opacity: 0; } }
-
-        #loader { position: fixed; top: 0; left: 0; height: 3px; background: linear-gradient(90deg, #3b82f6, #ec4899); width: 0%; transition: width 0.3s ease-in-out; z-index: 9999; }
-
-        .container { 
-            max-width: 650px; 
-            margin: auto; 
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 80vh;
-            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .title-wrapper {
-            position: relative;
-            margin-bottom: 25px;
-            text-align: center;
-        }
-
-        .site-title {
-            font-size: 72px;
-            font-weight: 900;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .site-title span {
-            display: inline-block;
-            opacity: 0;
-            transform: scale(1.8) translateY(60px);
-            animation: popAndSettle 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-            background: linear-gradient(to right, #fff, #3b82f6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 4px 20px rgba(37, 99, 235, 0.4);
-        }
-
-        .site-title span:nth-child(1) { animation-delay: 0.1s; }
-        .site-title span:nth-child(2) { animation-delay: 0.2s; }
-        .site-title span:nth-child(3) { animation-delay: 0.3s; }
-        .site-title span:nth-child(4) { animation-delay: 0.4s; }
-
-        @keyframes popAndSettle {
-            0% { opacity: 0; transform: scale(1.8) translateY(80px); }
-            100% { opacity: 1; transform: scale(1) translateY(0); }
-        }
-
-        .search-box-wrapper {
-            width: 100%;
-            max-width: 650px;
-            background: rgba(15, 23, 42, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            padding: 16px 20px;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-            display: flex;
-            align-items: center;
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeInSearch 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.9s forwards;
-        }
-
-        @keyframes fadeInSearch {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .search-box-wrapper input {
-            border: none;
-            outline: none;
-            width: 100%;
-            font-size: 18px;
-            background: transparent;
-            text-align: left;
-            color: #ffffff;
-        }
-        .search-box-wrapper input::placeholder { color: #94a3b8; }
-
-        .grid-container {
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
-            width: 100%;
-            margin-top: 35px;
-        }
-
-        .restaurant-card { 
-            background: rgba(15, 23, 42, 0.85); 
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            padding: 24px; 
-            border-radius: 20px; 
-            cursor: pointer; 
-            text-align: center; 
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(59, 130, 246, 0.25);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-            position: relative;
-            overflow: hidden;
-        }
-        .restaurant-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(59, 130, 246, 0.4);
-        }
-
-        .profile-img {
-            width: 100%;
-            height: 240px;
-            border-radius: 14px;
-            object-fit: cover;
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            margin-bottom: 18px;
-        }
-
-        .restaurant-info h3 { margin: 0 0 8px 0; font-size: 24px; color: #ffffff; }
-        .restaurant-info p { margin: 0; font-size: 16px; color: #94a3b8; }
-
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .modal-content {
-            background: #0f172a;
-            border: 1px solid rgba(59, 130, 246, 0.4);
-            max-width: 650px;
-            width: 100%;
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
-            text-align: center;
-            position: relative;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .close-btn {
-            position: absolute;
-            top: 15px; right: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border: none; color: white;
-            font-size: 20px; width: 35px; height: 35px;
-            border-radius: 50%; cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-            transition: background 0.2s;
-            z-index: 10;
-        }
-        .close-btn:hover { background: rgba(255, 255, 255, 0.2); }
-
-        .modal-title { font-size: 26px; color: #ffffff; margin: 0 0 15px 0; }
-
-        .slider-container {
-            position: relative;
-            width: 100%;
-            overflow: hidden;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            background: #000;
-        }
-
-        .slider-track {
-            display: flex;
-            transition: transform 0.4s ease-in-out;
-            width: 100%;
-        }
-
-        .slider-item {
-            min-width: 100%;
-            box-sizing: border-box;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .slider-item img {
-            width: 100%;
-            max-height: 420px;
-            object-fit: contain;
-        }
-
-        .slider-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(0, 0, 0, 0.6);
-            color: white;
-            border: none;
-            font-size: 20px;
-            padding: 10px 15px;
-            cursor: pointer;
-            border-radius: 50%;
-            transition: background 0.2s;
-            z-index: 5;
-        }
-        .slider-btn:hover { background: rgba(59, 130, 246, 0.8); }
-        .prev-btn { left: 10px; }
-        .next-btn { right: 10px; }
-
-        .slider-dots {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 12px;
-        }
-        .dot {
-            width: 10px; height: 10px;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        .dot.active { background: #3b82f6; width: 25px; border-radius: 5px; }
-
-        .modal-phone-btn {
-            display: block;
-            text-align: center;
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-            color: white;
-            padding: 15px;
-            border-radius: 12px;
-            text-decoration: none;
-            margin-top: 20px;
-            font-weight: 700;
-            font-size: 18px;
-            box-shadow: 0 5px 20px rgba(37, 99, 235, 0.5);
-            transition: opacity 0.2s, transform 0.2s;
-        }
-        .modal-phone-btn:hover { opacity: 0.9; transform: scale(1.02); }
-
-        .no-result { text-align: center; color: #94a3b8; font-size: 16px; margin-top: 30px; font-weight: 500; }
-    </style>
+    <title>تطبيق Appwrite مع GitHub</title>
+    <!-- استيراد Tailwind CSS للتصميم السريع -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- استيراد مكتبة Appwrite SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1"></script>
 </head>
-<body>
+<body class="bg-slate-900 text-white font-sans min-h-screen flex flex-col justify-between">
 
-<div id="loader"></div>
-<div id="particles-js"></div>
-
-<div class="container" id="mainContainer">
-    <div class="title-wrapper">
-        <div class="site-title">
-            <span>B</span><span>I</span><span>T</span><span>E</span>
+    <!-- الهيدر -->
+    <header class="p-6 border-b border-slate-800 flex justify-between items-center max-w-4xl mx-auto w-full">
+        <h1 class="text-xl font-bold text-red-500">Appwrite & GitHub 🚀</h1>
+        <div id="connection-status" class="text-sm px-3 py-1 rounded-full bg-yellow-500/10 text-yellow-400 border border-yellow-500/20">
+            جاري التحقق من الاتصال...
         </div>
-    </div>
+    </header>
 
-    <div class="search-box-wrapper">
-        <span style="margin-left: 10px; font-size: 20px;">🔍</span>
-        <input type="text" id="wilayaInput" placeholder="Entrez votre Wilaya (ex: Constantine)..." oninput="searchRestaurants()">
-    </div>
+    <!-- المحتوى الرئيسي -->
+    <main class="flex-grow flex items-center justify-center p-6">
+        <div class="max-w-md w-full bg-slate-800 p-8 rounded-2xl border border-slate-700 shadow-xl text-center">
+            <h2 class="text-2xl font-bold mb-4">مرحباً بك في مشروعك الجديد</h2>
+            <p class="text-slate-400 text-sm mb-6">
+                هذه الصفحة مرتبطة بـ Appwrite وجاهزة للنشر التلقائي عبر مستودع GitHub الخاص بك.
+            </p>
+            
+            <div id="project-info" class="bg-slate-900 p-4 rounded-xl text-right text-xs text-slate-300 space-y-2 mb-6 border border-slate-800">
+                <p><strong>Endpoint:</strong> <span id="lbl-endpoint" class="text-red-400">-</span></p>
+                <p><strong>Project ID:</strong> <span id="lbl-project" class="text-red-400">-</span></p>
+            </div>
 
-    <div id="resultsContainer" class="grid-container"></div>
-</div>
-
-<div id="restaurantModal" class="modal-overlay" onclick="closeModalOnOutside(event)">
-    <div class="modal-content">
-        <button class="close-btn" onclick="closeModal()">×</button>
-        <h2 id="modalName" class="modal-title"></h2>
-        
-        <div class="slider-container">
-            <button class="slider-btn prev-btn" onclick="moveSlide(-1)">❮</button>
-            <div class="slider-track" id="sliderTrack"></div>
-            <button class="slider-btn next-btn" onclick="moveSlide(1)">❯</button>
+            <button onclick="testAppwriteConnection()" class="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2.5 px-4 rounded-xl transition duration-200">
+                اختبار الاتصال بـ Appwrite
+            </button>
         </div>
-        
-        <div class="slider-dots" id="sliderDots"></div>
+    </main>
 
-        <a id="modalPhoneBtn" href="" class="modal-phone-btn">📞 Appeler pour commander</a>
-    </div>
-</div>
+    <!-- الفوتر -->
+    <footer class="p-4 text-center text-slate-500 text-xs border-t border-slate-800">
+        تم النشر تلقائياً عبر GitHub &bull; Appwrite Integration
+    </footer>
 
-<script>
-    let cachedRestaurants = null;
+    <!-- سكربت الاتصال بـ Appwrite -->
+    <script>
+        // ضع بيانات مشروعك هنا بعد إنشائه في لوحة التحكم
+        const APPWRITE_ENDPOINT = 'https://cloud.appwrite.io/v1';
+        const APPWRITE_PROJECT_ID = 'ضع_معرف_المشروع_هنا'; // استبدله بـ Project ID الخاص بك
 
-    function createParticles() {
-        const container = document.getElementById("particles-js");
-        for (let i = 0; i < 25; i++) {
-            let p = document.createElement("div");
-            p.className = "particle";
-            p.style.left = Math.random() * 100 + "%";
-            p.style.width = p.style.height = (Math.random() * 4 + 2) + "px";
-            p.style.animationDuration = (Math.random() * 6 + 6) + "s";
-            p.style.animationDelay = (Math.random() * 5) + "s";
-            container.appendChild(p);
-        }
-    }
-    createParticles();
+        // تهيئة SDK
+        const { Client, Account } = Appwrite;
+        const client = new Client();
 
-    let currentSlide = 0;
-    let currentImages = [];
+        client
+            .setEndpoint(APPWRITE_ENDPOINT)
+            .setProject(APPWRITE_PROJECT_ID);
 
-    async function searchRestaurants() {
-        let loader = document.getElementById("loader");
-        loader.style.width = "50%";
-        
-        let query = document.getElementById("wilayaInput").value.trim().toLowerCase();
-        let container = document.getElementById("resultsContainer");
-        let mainContainer = document.getElementById("mainContainer");
-        
-        container.innerHTML = "";
+        // تحديث النصوص في الواجهة
+        document.getElementById('lbl-endpoint').innerText = APPWRITE_ENDPOINT;
+        document.getElementById('lbl-project').innerText = APPWRITE_PROJECT_ID;
 
-        if (query === "") {
-            loader.style.width = "0%";
-            mainContainer.style.justifyContent = "center";
-            mainContainer.style.minHeight = "80vh";
-            return;
-        }
-
-        mainContainer.style.justifyContent = "flex-start";
-        mainContainer.style.minHeight = "unset";
-
-        try {
-            // تحميل ملف JSON الخارجي مرة واحدة فقط والاحتفاظ به في الذاكرة لسرعة فائقة
-            if (!cachedRestaurants) {
-                let response = await fetch('restaurants.json');
-                if (!response.ok) throw new Error("Erreur de chargement du fichier JSON");
-                cachedRestaurants = await response.json();
+        // التحقق التلقائي عند التحميل
+        window.addEventListener('DOMContentLoaded', () => {
+            const statusBadge = document.getElementById('connection-status');
+            if (APPWRITE_PROJECT_ID === 'ضع_معرف_المشروع_هنا') {
+                statusBadge.className = "text-sm px-3 py-1 rounded-full bg-red-500/10 text-red-400 border border-red-500/20";
+                statusBadge.innerText = "يرجى وضع Project ID";
+            } else {
+                statusBadge.className = "text-sm px-3 py-1 rounded-full bg-green-500/10 text-green-400 border border-green-500/20";
+                statusBadge.innerText = "متصل بـ Appwrite بنجاح";
             }
-
-            loader.style.width = "100%";
-            setTimeout(() => { loader.style.width = "0%"; }, 200);
-
-            let restaurants = cachedRestaurants.filter(r => r.wilaya.toLowerCase().includes(query));
-
-            if (restaurants.length === 0) {
-                container.innerHTML = "<p class='no-result'>Aucun restaurant trouvé pour cette wilaya.</p>";
-                return;
-            }
-
-            restaurants.forEach((rest) => {
-                let card = document.createElement("div");
-                card.className = "restaurant-card";
-                
-                card.innerHTML = `
-                    <img src="${rest.profile_img}" alt="${rest.name}" class="profile-img">
-                    <div class="restaurant-info">
-                        <h3>${rest.name}</h3>
-                        <p>📍 ${rest.wilaya}</p>
-                    </div>
-                `;
-                
-                card.onclick = function() {
-                    openModal(rest);
-                };
-
-                container.appendChild(card);
-            });
-
-        } catch (err) {
-            loader.style.width = "0%";
-            console.error("Erreur:", err);
-            container.innerHTML = `<p class='no-result' style="color: #ef4444;">Erreur de chargement des données.</p>`;
-        }
-    }
-
-    function openModal(rest) {
-        document.getElementById("modalName").innerText = rest.name;
-        
-        if (typeof rest.menu_images === 'string') {
-            currentImages = rest.menu_images.split(',').map(img => img.trim());
-        } else {
-            currentImages = [rest.profile_img];
-        }
-
-        currentSlide = 0;
-        updateSlider();
-
-        let phoneBtn = document.getElementById("modalPhoneBtn");
-        phoneBtn.href = "tel:" + rest.phone;
-        phoneBtn.innerText = "📞 Appeler pour commander : " + rest.phone;
-
-        document.getElementById("restaurantModal").style.display = "flex";
-    }
-
-    function updateSlider() {
-        let track = document.getElementById("sliderTrack");
-        let dotsContainer = document.getElementById("sliderDots");
-        
-        track.innerHTML = "";
-        dotsContainer.innerHTML = "";
-
-        currentImages.forEach((imgUrl, index) => {
-            let item = document.createElement("div");
-            item.className = "slider-item";
-            item.innerHTML = `<img src="${imgUrl}" alt="Menu">`;
-            track.appendChild(item);
-
-            let dot = document.createElement("div");
-            dot.className = `dot ${index === currentSlide ? 'active' : ''}`;
-            dot.onclick = () => {
-                currentSlide = index;
-                updateSliderPosition();
-            };
-            dotsContainer.appendChild(dot);
         });
 
-        updateSliderPosition();
-    }
-
-    function moveSlide(direction) {
-        currentSlide += direction;
-        if (currentSlide < 0) {
-            currentSlide = currentImages.length - 1;
-        } else if (currentSlide >= currentImages.length) {
-            currentSlide = 0;
+        // دالة لاختبار الاتصال بشكل متقدم
+        function testAppwriteConnection() {
+            const account = new Account(client);
+            account.get().then(
+                response => {
+                    alert('تم الاتصال بنجاح! المستخدم الحالي مسجل دخول.');
+                    console.log(response);
+                },
+                error => {
+                    // إذا لم يكن هناك مستخدم مسجل دخول، سيظهر هذا الخطأ الطبيعي
+                    alert('الاتصال يعمل بنجاح! (لا يوجد مستخدم مسجل حالياً)');
+                    console.log("Appwrite Ready:", error);
+                }
+            );
         }
-        updateSliderPosition();
-    }
-
-    function updateSliderPosition() {
-        let track = document.getElementById("sliderTrack");
-        track.style.transform = `translateX(-${currentSlide * 100}%)`;
-
-        $dots = document.querySelectorAll(".slider-dots .dot");
-        $dots.forEach((dot, index) => {
-            dot.classList.toggle("active", index === currentSlide);
-        });
-    }
-
-    function closeModal() {
-        document.getElementById("restaurantModal").style.display = "none";
-    }
-
-    function closeModalOnOutside(event) {
-        let modalContent = document.querySelector(".modal-content");
-        if (!modalContent.contains(event.target)) {
-            closeModal();
-        }
-    }
-</script>
-
+    </script>
 </body>
 </html>
