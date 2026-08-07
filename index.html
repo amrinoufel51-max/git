@@ -190,7 +190,6 @@
 
         .modal-title { font-size: 26px; color: #ffffff; margin: 0 0 15px 0; }
         
-        /* تنسيق الـ Slider الخاص بصور المنيو */
         .slider-container {
             position: relative;
             width: 100%;
@@ -272,7 +271,8 @@
 
     <div class="search-box-wrapper">
         <span style="margin-right: 10px; font-size: 20px;">🔍</span>
-        <input type="text" id="wilayaInput" placeholder="Entrez votre Wilaya (ex: setif, alger)..." oninput="searchRestaurants()">
+        <!-- التعديل هنا: البحث يخدم مباشرة بمجرد كتابة أول الحروف -->
+        <input type="text" id="wilayaInput" placeholder="Entrez votre Wilaya (ex: se, alger)..." oninput="searchRestaurants()">
     </div>
 
     <div id="resultsContainer" class="grid-container"></div>
@@ -283,7 +283,6 @@
         <button class="close-btn" onclick="closeModal()">×</button>
         <h2 id="modalName" class="modal-title"></h2>
         
-        <!-- هيكل السلايدر -->
         <div class="slider-container" id="sliderContainerBox">
             <button class="slider-btn prev-btn" onclick="changeSlide(-1)">❮</button>
             <div class="slider-image-wrapper">
@@ -348,11 +347,12 @@
         mainContainer.style.justifyContent = "flex-start";
         mainContainer.style.minHeight = "unset";
 
-        let matchedWilaya = wilayasList.find(w => w.includes(formattedQuery));
+        // التعديل هنا: `.startsWith` أو `.includes` تجعل البحث يبدأ بمجرد كتابة أول الحروف (مثل "se" تبحث عن "setif")
+        let matchedWilaya = wilayasList.find(w => w.startsWith(formattedQuery) || w.includes(formattedQuery));
 
         if (!matchedWilaya) {
             loader.style.width = "0%";
-            container.innerHTML = "<p class='no-result'>Wilaya introuvable ou mal orthographiée.</p>";
+            container.innerHTML = "<p class='no-result'>Wilaya introuvable...</p>";
             return;
         }
 
@@ -361,7 +361,7 @@
             
             if (!response.ok) {
                 loader.style.width = "0%";
-                container.innerHTML = `<p class='no-result'>Aucun restaurant enregistré pour ${matchedWilaya.toUpperCase()} pour le moment.</p>`;
+                container.innerHTML = `<p class='no-result'>Aucun restaurant pour ${matchedWilaya.toUpperCase()} pour le moment.</p>`;
                 return;
             }
 
@@ -389,7 +389,7 @@
 
         } catch (error) {
             loader.style.width = "0%";
-            container.innerHTML = "<p class='no-result'>Erreur lors du chargement des données.</p>";
+            container.innerHTML = "<p class='no-result'>Erreur de chargement.</p>";
         }
     }
 
@@ -441,9 +441,9 @@
         currentImageIndex += direction;
 
         if (currentImageIndex < 0) {
-            currentImageIndex = currentMenuImages.length - 1; // الدوران للآخيرة
+            currentImageIndex = currentMenuImages.length - 1;
         } else if (currentImageIndex >= currentMenuImages.length) {
-            currentImageIndex = 0; // العودة للأولى
+            currentImageIndex = 0;
         }
 
         updateSliderImage();
