@@ -8,7 +8,6 @@
     <style>
         * { box-sizing: border-box; }
         
-        /* تثبيت الخلفية لتغطي الشاشة بالكامل بدون أي بياض */
         body { 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
             background: linear-gradient(135deg, #000000, #0f172a, #1e3a8a, #090d16, #000000);
@@ -42,12 +41,10 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* خلفية الجسيمات المضيئة */
         #particles-js { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
         .particle { position: absolute; background: #ffffff; border-radius: 50%; opacity: 0.2; animation: floatParticle linear infinite; }
         @keyframes floatParticle { 0% { transform: translateY(100vh) scale(0); } 50% { opacity: 0.5; } 100% { transform: translateY(-50px) scale(1); opacity: 0; } }
 
-        /* شريط التحميل العلوي */
         #loader { position: fixed; top: 0; left: 0; height: 3px; background: linear-gradient(90deg, #3b82f6, #ec4899); width: 0%; transition: width 0.3s ease-in-out; z-index: 9999; }
 
         .container { 
@@ -94,14 +91,8 @@
         .site-title span:nth-child(4) { animation-delay: 0.4s; }
 
         @keyframes popAndSettle {
-            0% {
-                opacity: 0;
-                transform: scale(1.8) translateY(80px);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
+            0% { opacity: 0; transform: scale(1.8) translateY(80px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
         }
 
         .search-box-wrapper {
@@ -116,17 +107,13 @@
             display: flex;
             align-items: center;
             border: 1px solid rgba(59, 130, 246, 0.3);
-            
             opacity: 0;
             transform: translateY(20px);
             animation: fadeInSearch 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.9s forwards;
         }
 
         @keyframes fadeInSearch {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .search-box-wrapper input {
@@ -138,9 +125,7 @@
             text-align: left;
             color: #ffffff;
         }
-        .search-box-wrapper input::placeholder {
-            color: #94a3b8;
-        }
+        .search-box-wrapper input::placeholder { color: #94a3b8; }
 
         .grid-container {
             display: flex;
@@ -172,19 +157,6 @@
             transform: translateY(-5px);
             box-shadow: 0 15px 35px rgba(59, 130, 246, 0.4);
         }
-        .restaurant-card::before {
-            content: "";
-            position: absolute;
-            inset: -2px;
-            background: conic-gradient(from 0deg at 50% 50%, transparent 0%, #3b82f6 50%, transparent 100%);
-            border-radius: 22px;
-            z-index: -1;
-            opacity: 0;
-            transition: opacity 0.3s;
-            animation: rotateBorder 4s linear infinite;
-        }
-        .restaurant-card:hover::before { opacity: 1; }
-        @keyframes rotateBorder { 100% { transform: rotate(360deg); } }
 
         .profile-img {
             width: 100%;
@@ -195,24 +167,15 @@
             margin-bottom: 18px;
         }
 
-        .restaurant-info h3 {
-            margin: 0 0 8px 0;
-            font-size: 24px;
-            color: #ffffff;
-        }
-        .restaurant-info p {
-            margin: 0;
-            font-size: 16px;
-            color: #94a3b8;
-        }
+        .restaurant-info h3 { margin: 0 0 8px 0; font-size: 24px; color: #ffffff; }
+        .restaurant-info p { margin: 0; font-size: 16px; color: #94a3b8; }
 
+        /* تصميم نافذة المينيو مع السلايدر */
         .modal-overlay {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
@@ -238,37 +201,83 @@
 
         .close-btn {
             position: absolute;
-            top: 15px;
-            right: 20px;
+            top: 15px; right: 20px;
             background: rgba(255, 255, 255, 0.1);
-            border: none;
-            color: white;
-            font-size: 20px;
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            border: none; color: white;
+            font-size: 20px; width: 35px; height: 35px;
+            border-radius: 50%; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
             transition: background 0.2s;
+            z-index: 10;
         }
         .close-btn:hover { background: rgba(255, 255, 255, 0.2); }
 
-        .modal-title {
-            font-size: 26px;
-            color: #ffffff;
-            margin: 0 0 15px 0;
-        }
+        .modal-title { font-size: 26px; color: #ffffff; margin: 0 0 15px 0; }
 
-        .modal-menu-img {
+        /* ستايل السلايدر الجديد */
+        .slider-container {
+            position: relative;
             width: 100%;
+            overflow: hidden;
             border-radius: 12px;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            max-height: 450px;
-            object-fit: contain;
             background: #000;
         }
+
+        .slider-track {
+            display: flex;
+            transition: transform 0.4s ease-in-out;
+            width: 100%;
+        }
+
+        .slider-item {
+            min-width: 100%;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .slider-item img {
+            width: 100%;
+            max-height: 420px;
+            object-fit: contain;
+        }
+
+        /* أزرار التنقل يمين ويسار في السلايدر */
+        .slider-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            border: none;
+            font-size: 20px;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 50%;
+            transition: background 0.2s;
+            z-index: 5;
+        }
+        .slider-btn:hover { background: rgba(59, 130, 246, 0.8); }
+        .prev-btn { left: 10px; }
+        .next-btn { right: 10px; }
+
+        /* نقاط المؤشر تحت السلايدر */
+        .slider-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .dot {
+            width: 10px; height: 10px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .dot.active { background: #3b82f6; width: 25px; border-radius: 5px; }
 
         .modal-phone-btn {
             display: block;
@@ -286,13 +295,7 @@
         }
         .modal-phone-btn:hover { opacity: 0.9; transform: scale(1.02); }
 
-        .no-result { 
-            text-align: center; 
-            color: #94a3b8; 
-            font-size: 16px; 
-            margin-top: 30px; 
-            font-weight: 500;
-        }
+        .no-result { text-align: center; color: #94a3b8; font-size: 16px; margin-top: 30px; font-weight: 500; }
     </style>
 </head>
 <body>
@@ -315,11 +318,20 @@
     <div id="resultsContainer" class="grid-container"></div>
 </div>
 
+<!-- النافذة المنبثقة مع السلايدر -->
 <div id="restaurantModal" class="modal-overlay" onclick="closeModalOnOutside(event)">
     <div class="modal-content">
         <button class="close-btn" onclick="closeModal()">×</button>
         <h2 id="modalName" class="modal-title"></h2>
-        <img id="modalMenuImg" src="" alt="Menu" class="modal-menu-img">
+        
+        <div class="slider-container">
+            <button class="slider-btn prev-btn" onclick="moveSlide(-1)">❮</button>
+            <div class="slider-track" id="sliderTrack"></div>
+            <button class="slider-btn next-btn" onclick="moveSlide(1)">❯</button>
+        </div>
+        
+        <div class="slider-dots" id="sliderDots"></div>
+
         <a id="modalPhoneBtn" href="" class="modal-phone-btn">📞 Appeler pour commander</a>
     </div>
 </div>
@@ -339,64 +351,33 @@
     }
     createParticles();
 
+    // قاعدة بيانات تجريبية (ملاحظة: menuImages هنا عبارة عن مصفوفة فيها عدة صور للمينيو)
     const database = [
         {
             "name": "Le Gourmet Constantine",
             "wilaya": "Constantine",
             "phone": "0600112233",
             "profileImg": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=700",
-            "menuImage": "https://i.imgur.com/ggFDFrb.jpeg"
+            "menuImages": [
+                "https://i.imgur.com/ggFDFrb.jpeg",
+                "https://images.unsplash.com/photo-1544025162-d76694265947?w=700",
+                "https://images.unsplash.com/photo-1550547660-d9450f859349?w=700"
+            ]
         },
         {
             "name": "Fast Food El Gusto",
             "wilaya": "Constantine",
             "phone": "0611223344",
             "profileImg": "https://images.unsplash.com/photo-1543007630-9710e4a00a20?w=700",
-            "menuImage": "https://i.imgur.com/ggFDFrb.jpeg"
-        },
-        {
-            "name": "Pizzeria Roma",
-            "wilaya": "Constantine",
-            "phone": "0622334455",
-            "profileImg": "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=700",
-            "menuImage": "https://i.imgur.com/ggFDFrb.jpeg"
-        },
-        {
-            "name": "Tacos King",
-            "wilaya": "Constantine",
-            "phone": "0633445566",
-            "profileImg": "https://images.unsplash.com/photo-1550547660-d9450f859349?w=700",
-            "menuImage": "https://i.imgur.com/ggFDFrb.jpeg"
-        },
-        {
-            "name": "Grillades du Rocher",
-            "wilaya": "Constantine",
-            "phone": "0644556677",
-            "profileImg": "https://images.unsplash.com/photo-1544025162-d76694265947?w=700",
-            "menuImage": "https://i.imgur.com/ggFDFrb.jpeg"
-        },
-        {
-            "name": "Chawarma El Emir",
-            "wilaya": "Constantine",
-            "phone": "0655667788",
-            "profileImg": "https://images.unsplash.com/photo-1561758033-d89a9ad46330?w=700",
-            "menuImage": "https://i.imgur.com/ggFDFrb.jpeg"
-        },
-        {
-            "name": "Restaurant Cirta",
-            "wilaya": "Constantine",
-            "phone": "0666778899",
-            "profileImg": "https://images.unsplash.com/photo-1537047902294-62a40c20a6ae?w=700",
-            "menuImage": "https://i.imgur.com/ggFDFrb.jpeg"
-        },
-        {
-            "name": "Sandwicherie Express",
-            "wilaya": "Constantine",
-            "phone": "0677889900",
-            "profileImg": "https://images.unsplash.com/photo-1525351484163-7529414344d8?w=700",
-            "menuImage": "https://i.imgur.com/ggFDFrb.jpeg"
+            "menuImages": [
+                "https://i.imgur.com/ggFDFrb.jpeg",
+                "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=700"
+            ]
         }
     ];
+
+    let currentSlide = 0;
+    let currentImages = [];
 
     function searchRestaurants() {
         let loader = document.getElementById("loader");
@@ -447,12 +428,60 @@
 
     function openModal(rest) {
         document.getElementById("modalName").innerText = rest.name;
-        document.getElementById("modalMenuImg").src = rest.menuImage;
+        currentImages = rest.menuImages;
+        currentSlide = 0;
+        updateSlider();
+
         let phoneBtn = document.getElementById("modalPhoneBtn");
         phoneBtn.href = "tel:" + rest.phone;
         phoneBtn.innerText = "📞 Appeler pour commander : " + rest.phone;
 
         document.getElementById("restaurantModal").style.display = "flex";
+    }
+
+    function updateSlider() {
+        let track = document.getElementById("sliderTrack");
+        let dotsContainer = document.getElementById("sliderDots");
+        
+        track.innerHTML = "";
+        dotsContainer.innerHTML = "";
+
+        currentImages.forEach((imgUrl, index) => {
+            let item = document.createElement("div");
+            item.className = "slider-item";
+            item.innerHTML = `<img src="${imgUrl}" alt="Menu">`;
+            track.appendChild(item);
+
+            let dot = document.createElement("div");
+            dot.className = `dot ${index === currentSlide ? 'active' : ''}`;
+            dot.onclick = () => {
+                currentSlide = index;
+                updateSliderPosition();
+            };
+            dotsContainer.appendChild(dot);
+        });
+
+        updateSliderPosition();
+    }
+
+    function moveSlide(direction) {
+        currentSlide += direction;
+        if (currentSlide < 0) {
+            currentSlide = currentImages.length - 1;
+        } else if (currentSlide >= currentImages.length) {
+            currentSlide = 0;
+        }
+        updateSliderPosition();
+    }
+
+    function updateSliderPosition() {
+        let track = document.getElementById("sliderTrack");
+        track.style.transform = `translateX(-${currentSlide * 100}%)`;
+
+        let dots = document.querySelectorAll(".slider-dots .dot");
+        dots.forEach((dot, index) => {
+            dot.classList.toggle("active", index === currentSlide);
+        });
     }
 
     function closeModal() {
