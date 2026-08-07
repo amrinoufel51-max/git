@@ -5,9 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BITE - Annuaire des Restaurants</title>
 
-    <!-- استدعاء مكتبة Supabase للاتصال بالسحابة -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
     <style>
         * { box-sizing: border-box; }
         
@@ -335,11 +332,8 @@
 </div>
 
 <script>
-    // المفتاح الصحيح والرابط الأصلي للبروجكت:
     const SUPABASE_URL = 'https://cvzalanflgimiqbsfqex.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN2emFsYW5mbGdpbWlxYnNmcWV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYxMTE2ODYsImV4cCI6MjEwMTY4NzY4Nn0.sosUzZzXAkm3MSdM7jSbTqgneXipFySJVI2NymAkWM4';
-    
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     function createParticles() {
         const container = document.getElementById("particles-js");
@@ -378,42 +372,51 @@
         mainContainer.style.justifyContent = "flex-start";
         mainContainer.style.minHeight = "unset";
 
-        let { data: restaurants, error } = await supabaseClient
-            .from('restaurants')
-            .select('*')
-            .ilike('wilaya', `%${query}%`);
+        try {
+            // استخدام fetch مباشرة لـ REST API الخاص بـ Supabase متجاوزين المكتبة
+            let response = await fetch(`${SUPABASE_URL}/rest/v1/restaurants?wilaya=ilike.*${encodeURIComponent(query)}*&select=*`, {
+                headers: {
+                    'apikey': SUPABASE_ANON_KEY,
+                    'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+                }
+            });
 
-        loader.style.width = "0%";
+            loader.style.width = "0%";
 
-        if (error) {
-            console.error("Supabase Error:", error);
-            container.innerHTML = `<p class='no-result' style="color: #ef4444;">Erreur: ${error.message}</p>`;
-            return;
+            if (!response.ok) {
+                throw new Error('Erreur HTTP: ' + response.status);
+            }
+
+            let restaurants = await response.json();
+
+            if (!restaurants || restaurants.length === 0) {
+                container.innerHTML = "<p class='no-result'>Aucun restaurant trouvé pour cette wilaya.</p>";
+                return;
+            }
+
+            restaurants.forEach((rest) => {
+                let card = document.createElement("div");
+                card.className = "restaurant-card";
+                
+                card.innerHTML = `
+                    <img src="${rest.profile_img || ''}" alt="${rest.name || ''}" class="profile-img">
+                    <div class="restaurant-info">
+                        <h3>${rest.name || ''}</h3>
+                        <p>📍 ${rest.wilaya || ''}</p>
+                    </div>
+                `;
+                
+                card.onclick = function() {
+                    openModal(rest);
+                };
+
+                container.appendChild(card);
+            });
+        } catch (err) {
+            loader.style.width = "0%";
+            console.error("Fetch Error:", err);
+            container.innerHTML = `<p class='no-result' style="color: #ef4444;">Erreur de chargement des données.</p>`;
         }
-
-        if (!restaurants || restaurants.length === 0) {
-            container.innerHTML = "<p class='no-result'>Aucun restaurant trouvé pour cette wilaya.</p>";
-            return;
-        }
-
-        restaurants.forEach((rest) => {
-            let card = document.createElement("div");
-            card.className = "restaurant-card";
-            
-            card.innerHTML = `
-                <img src="${rest.profile_img}" alt="${rest.name}" class="profile-img">
-                <div class="restaurant-info">
-                    <h3>${rest.name}</h3>
-                    <p>📍 ${rest.wilaya}</p>
-                </div>
-            `;
-            
-            card.onclick = function() {
-                openModal(rest);
-            };
-
-            container.appendChild(card);
-        });
     }
 
     function openModal(rest) {
