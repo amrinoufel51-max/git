@@ -1,0 +1,19 @@
+[
+  {
+    "name": "Restaurant Le Délice de Sétif",
+    "profileImg": "https://res.cloudinary.com/your-cloud-name/image/upload/v1723000000/bite/setif/profile.jpg",
+    "phone": "0550123456",
+    "menuImages": [
+      "https://res.cloudinary.com/your-cloud-name/image/upload/v1723000000/bite/setif/menu_1.jpg",
+      "https://res.cloudinary.com/your-cloud-name/image/upload/v1723000000/bite/setif/menu_2.jpg",
+      "https://res.cloudinary.com/your-cloud-name/image/upload/v1723000000/bite/setif/menu_3.jpg",
+      "https://res.cloudinary.com/your-cloud-name/image/upload/v1723000000/bite/setif/menu_4.jpg",
+      "https://res.cloudinary.com/your-cloud-name/image/upload/v1723000000/bite/setif/menu_5.jpg",
+      "https://res.cloudinary.com/your-cloud-name/image/upload/v1723000000/bite/setif/menu_6.jpg",
+      "https://res.cloudinary.com/your-cloud-name/image/upload/v1723000000/bite/setif/menu_7.jpg",
+      "https://res.cloudinary.com/your-cloud-name/image/upload/v1723000000/bite/setif/menu_8.jpg",
+      "https://res.cloudinary.com/your-cloud-name/image/upload/v1723000000/bite/setif/menu_9.jpg",
+      "https://res.cloudinary.com/your-cloud-name/image/upload/v1723000000/bite/setif/menu_10.jpg"
+    ]
+  }
+]
