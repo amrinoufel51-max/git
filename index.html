@@ -373,8 +373,8 @@
         mainContainer.style.minHeight = "unset";
 
         try {
-            // استخدام fetch مباشرة لـ REST API الخاص بـ Supabase متجاوزين المكتبة
-            let response = await fetch(`${SUPABASE_URL}/rest/v1/restaurants?wilaya=ilike.*${encodeURIComponent(query)}*&select=*`, {
+            // استخدام % بدل * لتتوافق مع معايير Supabase ilike
+            let response = await fetch(`${SUPABASE_URL}/rest/v1/restaurants?wilaya=ilike.%25${encodeURIComponent(query)}%25&select=*`, {
                 headers: {
                     'apikey': SUPABASE_ANON_KEY,
                     'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
