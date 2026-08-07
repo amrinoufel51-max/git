@@ -1,331 +1,339 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BITE - Annuaire des Restaurants</title>
-
+    <title>BITE - الدليل الرقمي للمطاعم والحلويات</title>
     <style>
-        * { box-sizing: border-box; }
-        
-        body { 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
-            background: linear-gradient(135deg, #000000, #0f172a, #1e3a8a, #090d16, #000000);
-            background-size: 400% 400%;
-            animation: waveBackground 12s ease infinite;
-            margin: 0; 
-            padding: 30px 15px; 
-            direction: ltr; 
-            color: #f8fafc;
-            min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
+        :root {
+            --primary-color: #ff4757;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-color: #2f3640;
+            --gray-text: #718093;
         }
 
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: linear-gradient(135deg, #000000, #0f172a, #1e3a8a, #090d16, #000000);
-            background-size: 400% 400%;
-            animation: waveBackground 12s ease infinite;
-            z-index: -2;
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        @keyframes waveBackground {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
         }
 
-        #particles-js { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
-        .particle { position: absolute; background: #ffffff; border-radius: 50%; opacity: 0.2; animation: floatParticle linear infinite; }
-        @keyframes floatParticle { 0% { transform: translateY(100vh) scale(0); } 50% { opacity: 0.5; } 100% { transform: translateY(-50px) scale(1); opacity: 0; } }
-
-        #loader { position: fixed; top: 0; left: 0; height: 3px; background: linear-gradient(90deg, #3b82f6, #ec4899); width: 0%; transition: width 0.3s ease-in-out; z-index: 9999; }
-
-        .container { 
-            max-width: 650px; 
-            margin: auto; 
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 80vh;
-            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .title-wrapper {
-            position: relative;
-            margin-bottom: 25px;
-            text-align: center;
-        }
-
-        .site-title {
-            font-size: 72px;
-            font-weight: 900;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .site-title span {
-            display: inline-block;
-            opacity: 0;
-            transform: scale(1.8) translateY(60px);
-            animation: popAndSettle 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-            background: linear-gradient(to right, #fff, #3b82f6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 4px 20px rgba(37, 99, 235, 0.4);
-        }
-
-        .site-title span:nth-child(1) { animation-delay: 0.1s; }
-        .site-title span:nth-child(2) { animation-delay: 0.2s; }
-        .site-title span:nth-child(3) { animation-delay: 0.3s; }
-        .site-title span:nth-child(4) { animation-delay: 0.4s; }
-
-        @keyframes popAndSettle {
-            0% { opacity: 0; transform: scale(1.8) translateY(80px); }
-            100% { opacity: 1; transform: scale(1) translateY(0); }
-        }
-
-        .search-box-wrapper {
-            width: 100%;
-            max-width: 650px;
-            background: rgba(15, 23, 42, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            padding: 16px 20px;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-            display: flex;
-            align-items: center;
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeInSearch 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.9s forwards;
-        }
-
-        @keyframes fadeInSearch { to { opacity: 1; transform: translateY(0); } }
-
-        .search-box-wrapper input {
-            border: none;
-            outline: none;
-            width: 100%;
-            font-size: 18px;
-            background: transparent;
-            text-align: left;
-            color: #ffffff;
-        }
-        .search-box-wrapper input::placeholder { color: #94a3b8; }
-
-        .grid-container {
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
-            width: 100%;
-            margin-top: 35px;
-        }
-
-        .restaurant-card { 
-            background: rgba(15, 23, 42, 0.85); 
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            padding: 24px; 
-            border-radius: 20px; 
-            cursor: pointer; 
-            text-align: center; 
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(59, 130, 246, 0.25);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-            position: relative;
-            overflow: hidden;
-        }
-        .restaurant-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(59, 130, 246, 0.4);
-        }
-
-        .profile-img {
-            width: 100%;
-            height: 240px;
-            border-radius: 14px;
-            object-fit: cover;
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            margin-bottom: 18px;
-        }
-
-        .restaurant-info h3 { margin: 0 0 8px 0; font-size: 24px; color: #ffffff; }
-        .restaurant-info p { margin: 0; font-size: 16px; color: #94a3b8; }
-
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            z-index: 1000;
-            justify-content: center; align-items: center;
+        header {
+            background-color: var(--card-bg);
             padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
-        .modal-content {
-            background: #0f172a;
-            border: 1px solid rgba(59, 130, 246, 0.4);
-            max-width: 650px; width: 100%;
-            border-radius: 20px; padding: 25px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
-            text-align: center; position: relative;
-            max-height: 90vh; overflow-y: auto;
+        header h1 {
+            color: var(--primary-color);
+            font-size: 28px;
+            margin-bottom: 5px;
         }
 
-        .close-btn {
-            position: absolute; top: 15px; right: 20px;
-            background: rgba(255, 255, 255, 0.1); border: none;
-            color: white; font-size: 20px; width: 35px; height: 35px;
-            border-radius: 50%; cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
+        header p {
+            color: var(--gray-text);
+            font-size: 14px;
         }
 
-        .modal-title { font-size: 26px; color: #ffffff; margin: 0 0 15px 0; }
-        .modal-menu-img { width: 100%; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1); max-height: 450px; object-fit: contain; background: #000; }
-        .modal-phone-btn {
-            display: block; text-align: center;
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-            color: white; padding: 15px; border-radius: 12px;
-            text-decoration: none; margin-top: 20px; font-weight: 700; font-size: 18px;
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 15px;
         }
 
-        .no-result { text-align: center; color: #94a3b8; font-size: 16px; margin-top: 30px; font-weight: 500; }
+        .search-filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .search-filters input, .search-filters select {
+            flex: 1;
+            min-width: 200px;
+            padding: 12px 15px;
+            border: 1px solid #dcdde1;
+            border-radius: 8px;
+            font-size: 16px;
+            outline: none;
+            background: var(--card-bg);
+        }
+
+        .search-filters input:focus, .search-filters select:focus {
+            border-color: var(--primary-color);
+        }
+
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-img-container {
+            width: 100%;
+            height: 180px;
+            background: #dfe4ea;
+            position: relative;
+        }
+
+        .card-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 4px 10px;
+            font-size: 12px;
+            border-radius: 20px;
+        }
+
+        .card-content {
+            padding: 15px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .card-info {
+            font-size: 14px;
+            color: var(--gray-text);
+            margin-bottom: 12px;
+        }
+
+        .menu-slider-container {
+            margin-top: 10px;
+            border-top: 1px solid #f1f2f6;
+            padding-top: 10px;
+        }
+
+        .menu-slider-title {
+            font-size: 13px;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        .slider {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            gap: 10px;
+            scrollbar-width: none;
+            padding-bottom: 5px;
+        }
+
+        .slider::-webkit-scrollbar {
+            display: none;
+        }
+
+        .slider img {
+            width: 90px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 6px;
+            scroll-snap-align: start;
+            flex-shrink: 0;
+            background: #eee;
+            border: 1px solid #eee;
+        }
+
+        .card-footer {
+            margin-top: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .phone-btn {
+            background-color: #2ed573;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .phone-btn:hover {
+            background-color: #26af5f;
+        }
+
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px;
+            color: var(--gray-text);
+            font-size: 18px;
+        }
     </style>
 </head>
 <body>
 
-<div id="loader"></div>
-<div id="particles-js"></div>
+    <header>
+        <h1>BITE</h1>
+        <p>دليلك الأول للمطاعم، الحلويات، والمشاريع المنزلية في الجزائر</p>
+    </header>
 
-<div class="container" id="mainContainer">
-    <div class="title-wrapper">
-        <div class="site-title">
-            <span>B</span><span>I</span><span>T</span><span>E</span>
+    <div class="container">
+        <!-- شريط البحث والتصفية -->
+        <div class="search-filters">
+            <input type="text" id="searchInput" placeholder="ابحث باسم المطعم أو الأكل..." oninput="filterData()">
+            
+            <select id="wilayaFilter" onchange="filterData()">
+                <option value="">كل الولايات الكبرى</option>
+                <option value="الجزائر العاصمة">الجزائر العاصمة</option>
+                <option value="وهران">وهران</option>
+                <option value="قسنطينة">قسنطينة</option>
+                <option value="سطيف">سطيف</option>
+                <option value="البليدة">البليدة</option>
+                <option value="تيزي وزو">تيزي وزو</option>
+                <option value="عنابة">عنابة</option>
+                <option value="باتنة">باتنة</option>
+                <option value="تلمسان">تلمسان</option>
+                <option value="الجلفة">الجلفة</option>
+            </select>
+
+            <select id="categoryFilter" onchange="filterData()">
+                <option value="">جميع التصنيفات</option>
+                <option value="مطعم">مطعم</option>
+                <option value="حلويات">حلويات وباتيسري</option>
+                <option value="مشاريع منزلية">مشاريع منزلية</option>
+            </select>
         </div>
+
+        <div class="grid-cards" id="cardsContainer"></div>
     </div>
 
-    <div class="search-box-wrapper">
-        <span style="margin-left: 10px; font-size: 20px;">🔍</span>
-        <input type="text" id="wilayaInput" placeholder="Entrez votre Wilaya (ex: Constantine)..." oninput="searchRestaurants()">
-    </div>
+    <!-- استدعاء ملفات الولايات الـ 10 -->
+    <script src="alger.js"></script>
+    <script src="oran.js"></script>
+    <script src="constantine.js"></script>
+    <script src="setif.js"></script>
+    <script src="blida.js"></script>
+    <script src="tiziouzou.js"></script>
+    <script src="annaba.js"></script>
+    <script src="batna.js"></script>
+    <script src="tlemcen.js"></script>
+    <script src="djelfa.js"></script>
 
-    <div id="resultsContainer" class="grid-container"></div>
-</div>
+    <!-- ملف التجميع والمنطق البرمجي -->
+    <script>
+        const database = [
+            ...(typeof algerData !== 'undefined' ? algerData : []),
+            ...(typeof oranData !== 'undefined' ? oranData : []),
+            ...(typeof constantineData !== 'undefined' ? constantineData : []),
+            ...(typeof setifData !== 'undefined' ? setifData : []),
+            ...(typeof blidaData !== 'undefined' ? blidaData : []),
+            ...(typeof tiziouzouData !== 'undefined' ? tiziouzouData : []),
+            ...(typeof annabaData !== 'undefined' ? annabaData : []),
+            ...(typeof batnaData !== 'undefined' ? batnaData : []),
+            ...(typeof tlemcenData !== 'undefined' ? tlemcenData : []),
+            ...(typeof djelfaData !== 'undefined' ? djelfaData : [])
+        ];
 
-<div id="restaurantModal" class="modal-overlay" onclick="closeModalOnOutside(event)">
-    <div class="modal-content">
-        <button class="close-btn" onclick="closeModal()">×</button>
-        <h2 id="modalName" class="modal-title"></h2>
-        <img id="modalMenuImg" src="" alt="Menu" class="modal-menu-img">
-        <a id="modalPhoneBtn" href="" class="modal-phone-btn">📞 Appeler pour commander</a>
-    </div>
-</div>
+        function renderCards(dataToDisplay) {
+            const container = document.getElementById('cardsContainer');
+            container.innerHTML = '';
 
-<!-- استدعاء ملف المطاعم الخارجي هنا -->
-<script src="database.js"></script>
+            if (dataToDisplay.length === 0) {
+                container.innerHTML = `<div class="no-results">عذراً، لم نجد أي نتيجة تطابق بحثك.</div>`;
+                return;
+            }
 
-<script>
-    function createParticles() {
-        const container = document.getElementById("particles-js");
-        for (let i = 0; i < 25; i++) {
-            let p = document.createElement("div");
-            p.className = "particle";
-            p.style.left = Math.random() * 100 + "%";
-            p.style.width = p.style.height = (Math.random() * 4 + 2) + "px";
-            p.style.animationDuration = (Math.random() * 6 + 6) + "s";
-            p.style.animationDelay = (Math.random() * 5) + "s";
-            container.appendChild(p);
+            dataToDisplay.forEach(item => {
+                let menuImagesHTML = '';
+                if (item.menus && item.menus.length > 0) {
+                    let imagesTags = item.menus.map(img => `<img src="${img}" loading="lazy" alt="صفحة منيو">`).join('');
+                    menuImagesHTML = `
+                        <div class="menu-slider-container">
+                            <div class="menu-slider-title">صفحات المنيو (${item.menus.length} صفحات):</div>
+                            <div class="slider">
+                                ${imagesTags}
+                            </div>
+                        </div>
+                    `;
+                }
+
+                const cardHTML = `
+                    <div class="card">
+                        <div class="card-img-container">
+                            <img src="${item.profileImg}" loading="lazy" alt="${item.name}">
+                            <span class="badge">${item.category}</span>
+                        </div>
+                        <div class="card-content">
+                            <div>
+                                <div class="card-title">${item.name}</div>
+                                <div class="card-info">📍 ${item.wilaya}</div>
+                            </div>
+                            
+                            ${menuImagesHTML}
+
+                            <div class="card-footer">
+                                <a href="tel:${item.phone}" class="phone-btn">📞 اتصل: ${item.phone}</a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += cardHTML;
+            });
         }
-    }
-    createParticles();
 
-    function searchRestaurants() {
-        let loader = document.getElementById("loader");
-        loader.style.width = "100%";
-        setTimeout(() => { loader.style.width = "0%"; }, 300);
+        function filterData() {
+            const searchText = document.getElementById('searchInput').value.toLowerCase();
+            const selectedWilaya = document.getElementById('wilayaFilter').value;
+            const selectedCategory = document.getElementById('categoryFilter').value;
 
-        let query = document.getElementById("wilayaInput").value.trim().toLowerCase();
-        let container = document.getElementById("resultsContainer");
-        let mainContainer = document.getElementById("mainContainer");
-        
-        container.innerHTML = "";
+            const filtered = database.filter(item => {
+                const matchesSearch = item.name.toLowerCase().includes(searchText);
+                const matchesWilaya = selectedWilaya === "" || item.wilaya === selectedWilaya;
+                const matchesCategory = selectedCategory === "" || item.category === selectedCategory;
 
-        if (query === "") {
-            mainContainer.style.justifyContent = "center";
-            mainContainer.style.minHeight = "80vh";
-            return;
+                return matchesSearch && matchesWilaya && matchesCategory;
+            });
+
+            renderCards(filtered);
         }
 
-        mainContainer.style.justifyContent = "flex-start";
-        mainContainer.style.minHeight = "unset";
-
-        // متغير database يجي مباشرة من الملف الخارجي database.js
-        let filtered = database.filter(r => r.wilaya.toLowerCase().includes(query));
-
-        if (filtered.length === 0) {
-            container.innerHTML = "<p class='no-result'>Aucun restaurant trouvé pour cette wilaya.</p>";
-            return;
-        }
-
-        filtered.forEach((rest) => {
-            let card = document.createElement("div");
-            card.className = "restaurant-card";
-            
-            card.innerHTML = `
-                <img src="${rest.profileImg}" alt="${rest.name}" class="profile-img">
-                <div class="restaurant-info">
-                    <h3>${rest.name}</h3>
-                    <p>📍 ${rest.wilaya}</p>
-                </div>
-            `;
-            
-            card.onclick = function() {
-                openModal(rest);
-            };
-
-            container.appendChild(card);
-        });
-    }
-
-    function openModal(rest) {
-        document.getElementById("modalName").innerText = rest.name;
-        document.getElementById("modalMenuImg").src = rest.menuImage;
-        let phoneBtn = document.getElementById("modalPhoneBtn");
-        phoneBtn.href = "tel:" + rest.phone;
-        phoneBtn.innerText = "📞 Appeler pour commander : " + rest.phone;
-
-        document.getElementById("restaurantModal").style.display = "flex";
-    }
-
-    function closeModal() {
-        document.getElementById("restaurantModal").style.display = "none";
-    }
-
-    function closeModalOnOutside(event) {
-        let modalContent = document.querySelector(".modal-content");
-        if (!modalContent.contains(event.target)) {
-            closeModal();
-        }
-    }
-</script>
-
+        window.onload = function() {
+            renderCards(database);
+        };
+    </script>
 </body>
 </html>
