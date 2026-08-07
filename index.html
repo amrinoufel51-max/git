@@ -335,9 +335,10 @@
 </div>
 
 <script>
-    // استبدل هذه القيم بمعلومات مشروعك الحقيقية من Supabase
-    const SUPABASE_URL = 'YOUR_SUPABASE_URL';
-    const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+    // تم دمج بيانات الاتصال الخاصة بك بشكل آلي:
+    const SUPABASE_URL = 'https://cvzalanflgimiqbsfqex.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_fRM0FbDdlav6uuKM8hPkxA_ccQcfjLZ';
+    
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     function createParticles() {
@@ -412,7 +413,6 @@
     function openModal(rest) {
         document.getElementById("modalName").innerText = rest.name;
         
-        // معالجة صور السلايدر سواء كانت نص مفصول بفاصلة أو مصفوفة
         if (typeof rest.menu_images === 'string') {
             currentImages = rest.menu_images.split(',').map(img => img.trim());
         } else if (Array.isArray(rest.menu_images)) {
