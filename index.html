@@ -224,7 +224,7 @@
 
     <div class="search-box-wrapper">
         <span style="margin-left: 10px; font-size: 20px;">🔍</span>
-        <input type="text" id="wilayaInput" placeholder="Entrez votre Wilaya (ex: alger, oran, setif...)" oninput="searchRestaurants()">
+        <input type="text" id="wilayaInput" placeholder="Entrez votre Wilaya (ex: skikda, setif, alger...)" oninput="searchRestaurants()">
     </div>
 
     <div id="resultsContainer" class="grid-container"></div>
@@ -239,21 +239,51 @@
     </div>
 </div>
 
-<!-- استدعاء ملفات الولايات الخمسة -->
-<script src="alger.js"></script>
-<script src="oran.js"></script>
-<script src="constantine.js"></script>
-<script src="setif.js"></script>
-<script src="skikda.js"></script>
-
 <script>
-    // تجميع البيانات من الملفات الخارجية تلقائياً حسب المتغيرات المعتمدة
+    // القاعدة المدمجة مباشرة لضمان ظهور المطاعم بدون مشاكل ربط الملفات
     const database = [
-        ...(typeof algerData !== 'undefined' ? algerData : []),
-        ...(typeof oranData !== 'undefined' ? oranData : []),
-        ...(typeof constantineData !== 'undefined' ? constantineData : []),
-        ...(typeof setifData !== 'undefined' ? setifData : []),
-        ...(typeof skikdaData !== 'undefined' ? skikdaData : [])
+        { 
+            name: "مطعم الكورنيش السكيكدي", 
+            wilaya: "skikda", 
+            phone: "038771122", 
+            profileImg: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=500", 
+            menuImage: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=500" 
+        },
+        { 
+            name: "باتيسري مرجانة", 
+            wilaya: "skikda", 
+            phone: "038772233", 
+            profileImg: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=500", 
+            menuImage: "https://images.unsplash.com/photo-1587314168485-3236d6710814?w=500" 
+        },
+        { 
+            name: "مطعم عين الفوارة", 
+            wilaya: "setif", 
+            phone: "036112233", 
+            profileImg: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=500", 
+            menuImage: "https://images.unsplash.com/photo-1544025162-d76694265947?w=500" 
+        },
+        { 
+            name: "مطعم الجزائر العاصمة", 
+            wilaya: "alger", 
+            phone: "021112233", 
+            profileImg: "https://images.unsplash.com/photo-1552566626-52f8b828add9?w=500", 
+            menuImage: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=500" 
+        },
+        { 
+            name: "مطعم وهران الباهية", 
+            wilaya: "oran", 
+            phone: "041112233", 
+            profileImg: "https://images.unsplash.com/photo-1537047902294-62a40c20a6ae?w=500", 
+            menuImage: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=500" 
+        },
+        { 
+            name: "مطعم قسنطينة الجسر المعلق", 
+            wilaya: "constantine", 
+            phone: "031112233", 
+            profileImg: "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=500", 
+            menuImage: "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=500" 
+        }
     ];
 
     function createParticles() {
@@ -290,10 +320,10 @@
         mainContainer.style.justifyContent = "flex-start";
         mainContainer.style.minHeight = "unset";
 
-        let filtered = database.filter(r => r.wilaya.toLowerCase().includes(query));
+        let filtered = database.filter(r => r.wilaya.toLowerCase().includes(query) || r.name.toLowerCase().includes(query));
 
         if (filtered.length === 0) {
-            container.innerHTML = "<p class='no-result'>Aucun restaurant trouvé pour cette wilaya.</p>";
+            container.innerHTML = "<p class='no-result'>Aucun restaurant trouvé pour cette recherche.</p>";
             return;
         }
 
@@ -301,19 +331,16 @@
             let card = document.createElement("div");
             card.className = "restaurant-card";
             
-            // دعم الخاصية في حال كانت الصورة الأولى في مصفوفة المنيو أو صورة مباشرة
-            let menuImageSrc = rest.menuImage || (rest.menus && rest.menus.length > 0 ? rest.menus[0] : '');
-
             card.innerHTML = `
                 <img src="${rest.profileImg}" alt="${rest.name}" class="profile-img">
                 <div class="restaurant-info">
                     <h3>${rest.name}</h3>
-                    <p>📍 ${rest.wilaya}</p>
+                    <p>📍 ${rest.wilaya.toUpperCase()}</p>
                 </div>
             `;
             
             card.onclick = function() {
-                openModal({ ...rest, menuImage: menuImageSrc });
+                openModal(rest);
             };
 
             container.appendChild(card);
