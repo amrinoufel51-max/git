@@ -131,7 +131,6 @@
             backdrop-filter: blur(12px);
             padding: 24px; 
             border-radius: 20px; 
-            cursor: pointer; 
             text-align: center; 
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
             border: 1px solid rgba(59, 130, 246, 0.25);
@@ -156,14 +155,58 @@
         }
 
         .restaurant-info h3 { margin: 0 0 8px 0; font-size: 24px; color: #ffffff; }
-        .restaurant-info p { margin: 0; font-size: 16px; color: #94a3b8; }
+        .restaurant-info p { margin: 0 0 12px 0; font-size: 16px; color: #94a3b8; }
 
+        /* تصميم أزرار المنيو ورقم الهاتف داخل الكارت */
+        .card-actions {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .menu-trigger-btn {
+            flex: 1;
+            background: rgba(59, 130, 246, 0.15);
+            border: 1px solid #3b82f6;
+            color: #3b82f6;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+        }
+        .menu-trigger-btn:hover {
+            background: #3b82f6;
+            color: #ffffff;
+        }
+
+        .phone-action-btn {
+            flex: 1;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: white;
+            padding: 12px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+        }
+        .phone-action-btn:hover { opacity: 0.9; }
+
+        /* نافذة العرض المنبثقة بجودة HD وتمرير سلس */
         .modal-overlay {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(8px);
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
             z-index: 1000;
             justify-content: center; align-items: center;
             padding: 20px;
@@ -172,7 +215,7 @@
         .modal-content {
             background: #0f172a;
             border: 1px solid rgba(59, 130, 246, 0.4);
-            max-width: 650px; width: 100%;
+            max-width: 800px; width: 100%;
             border-radius: 20px; padding: 25px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.8);
             text-align: center; position: relative;
@@ -188,74 +231,43 @@
             z-index: 10;
         }
 
-        .modal-title { font-size: 26px; color: #ffffff; margin: 0 0 15px 0; }
-        
-        .slider-container {
-            position: relative;
-            width: 100%;
+        .modal-title { font-size: 24px; color: #ffffff; margin: 0 0 15px 0; }
+
+        /* معرض صور المنيو بالجودة الأصلية داخل المودال */
+        .menu-gallery {
             display: flex;
+            flex-direction: column;
+            gap: 20px;
             align-items: center;
-            justify-content: center;
             margin-top: 15px;
         }
 
-        /* حاوية الصورة تتكيف كلياً وسلاسة مع أبعاد الصورة الحقيقية */
-        .slider-image-wrapper {
-            width: 100%;
-            background: #000;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: height 0.3s ease; /* سلاسة تامة عند تغيير المقاسات بين الصور */
-        }
-
-        .modal-menu-img {
+        .hd-menu-img {
             width: 100%;
             height: auto;
-            max-height: 75vh;
-            object-fit: contain;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
             display: block;
-            transition: opacity 0.3s ease;
         }
 
-        .slider-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            font-size: 20px;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
+        /* زر التحميل والتنزيل */
+        .download-btn {
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            transition: background 0.2s;
-            z-index: 5;
-        }
-        .slider-btn:hover { background: rgba(59, 130, 246, 0.9); }
-        .prev-btn { left: 10px; }
-        .next-btn { right: 10px; }
-
-        .slider-counter {
-            margin-top: 10px;
+            gap: 8px;
+            background: #10b981;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
             font-size: 14px;
-            color: #94a3b8;
-            font-weight: 500;
+            margin-top: 8px;
+            transition: background 0.2s;
         }
-
-        .modal-phone-btn {
-            display: block; text-align: center;
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-            color: white; padding: 15px; border-radius: 12px;
-            text-decoration: none; margin-top: 20px; font-weight: 700; font-size: 18px;
-        }
+        .download-btn:hover { background: #059669; }
 
         .no-result { text-align: center; color: #94a3b8; font-size: 16px; margin-top: 30px; font-weight: 500; }
     </style>
@@ -280,21 +292,15 @@
     <div id="resultsContainer" class="grid-container"></div>
 </div>
 
+<!-- النافذة المنبثقة لعرض صور المنيو بجودة HD مع زر التحميل -->
 <div id="restaurantModal" class="modal-overlay" onclick="closeModalOnOutside(event)">
     <div class="modal-content">
         <button class="close-btn" onclick="closeModal()">×</button>
         <h2 id="modalName" class="modal-title"></h2>
         
-        <div class="slider-container" id="sliderContainerBox">
-            <button class="slider-btn prev-btn" onclick="changeSlide(-1)">❮</button>
-            <div class="slider-image-wrapper" id="sliderImageWrapper">
-                <img id="modalMenuImg" class="modal-menu-img" src="" alt="Menu">
-            </div>
-            <button class="slider-btn next-btn" onclick="changeSlide(1)">❯</button>
+        <div id="menuGallery" class="menu-gallery">
+            <!-- ستتم تعبئة صور المنيو هنا ديناميكياً بجودتها الكاملة -->
         </div>
-        <div id="sliderCounter" class="slider-counter"></div>
-
-        <a id="modalPhoneBtn" href="" class="modal-phone-btn">📞 Appeler pour commander</a>
     </div>
 </div>
 
@@ -310,9 +316,6 @@
         "in_guezzam", "in_salah", "janet", "el_meghaier", "el_meniaa"
     ];
 
-    let currentMenuImages = [];
-    let currentImageIndex = 0;
-    
     let allRestaurants = [];
     let displayedCount = 0;
     const batchSize = 10;
@@ -395,14 +398,14 @@
                 <img src="${rest.profileImg}" alt="${rest.name}" class="profile-img" loading="lazy">
                 <div class="restaurant-info">
                     <h3>${rest.name}</h3>
-                    <p>📍 ${wilayaName.toUpperCase()}</p>
+                    <p>📍 ${wilayaName.toUpperCase()} — 📞 ${rest.phone}</p>
+                    <div class="card-actions">
+                        <button class="menu-trigger-btn" onclick='openModal(${JSON.stringify(rest).replace(/'/g, "&#39;")})'>Menu</button>
+                        <a href="tel:${rest.phone}" class="phone-action-btn">📞 Appeler</a>
+                    </div>
                 </div>
             `;
             
-            card.onclick = function() {
-                openModal(rest);
-            };
-
             container.appendChild(card);
         });
 
@@ -422,84 +425,41 @@
     });
 
     function openModal(rest) {
-        document.getElementById("modalName").innerText = rest.name;
-        
-        currentMenuImages = rest.menuImages || [];
-        currentImageIndex = 0;
+        document.getElementById("modalName").innerText = rest.name + " - Menu";
+        let galleryContainer = document.getElementById("menuGallery");
+        galleryContainer.innerHTML = "";
 
-        let sliderBox = document.getElementById("sliderContainerBox");
-        let counterBox = document.getElementById("sliderCounter");
+        let images = rest.menuImages || [];
 
-        if (currentMenuImages.length > 0) {
-            sliderBox.style.display = "flex";
-            updateSliderImage();
+        if (images.length === 0) {
+            galleryContainer.innerHTML = "<p style='color: #94a3b8;'>Aucun menu disponible pour le moment.</p>";
         } else {
-            sliderBox.style.display = "none";
-            counterBox.innerText = "Aucun menu disponible";
-        }
+            images.forEach((imgSrc, index) => {
+                let wrapper = document.createElement("div");
+                wrapper.style.width = "100%";
+                wrapper.style.display = "flex";
+                wrapper.style.flexDirection = "column";
+                wrapper.style.alignItems = "center";
 
-        let phoneBtn = document.getElementById("modalPhoneBtn");
-        phoneBtn.href = "tel:" + rest.phone;
-        phoneBtn.innerText = "📞 Appeler pour commander : " + rest.phone;
+                let img = document.createElement("img");
+                img.src = imgSrc;
+                img.className = "hd-menu-img";
+                img.alt = `Menu ${index + 1}`;
+
+                // زر تحميل الصورة بجودتها الكاملة
+                let downloadBtn = document.createElement("a");
+                downloadBtn.href = imgSrc;
+                downloadBtn.download = `${rest.name}_menu_${index + 1}.jpg`;
+                downloadBtn.className = "download-btn";
+                downloadBtn.innerHTML = `⬇️ Télécharger le Menu ${index + 1}`;
+
+                wrapper.appendChild(img);
+                wrapper.appendChild(downloadBtn);
+                galleryContainer.appendChild(wrapper);
+            });
+        }
 
         document.getElementById("restaurantModal").style.display = "flex";
-    }
-
-    function updateSliderImage() {
-        let imgElement = document.getElementById("modalMenuImg");
-        let wrapperElement = document.getElementById("sliderImageWrapper");
-        let counterElement = document.getElementById("sliderCounter");
-
-        imgElement.src = currentMenuImages[currentImageIndex];
-        counterElement.innerText = `Menu ${currentImageIndex + 1} / ${currentMenuImages.length}`;
-        
-        // حساب أبعاد الصورة تلقائياً بمجرد تحميلها لتطبيقها على الحاوية بدقة
-        imgElement.onload = function() {
-            let wrapperWidth = wrapperElement.clientWidth;
-            // حساب الارتفاع النسبي للحاوية بناءً على العرض والطول الحقيقي للصورة
-            let naturalRatio = imgElement.naturalHeight / imgElement.naturalWidth;
-            let calculatedHeight = wrapperWidth * naturalRatio;
-
-            // تحديد حدود قصوى لئلا تصبح الصورة طويلة جداً بشكل يخرج عن الشاشة
-            let maxHeight = window.innerHeight * 0.75;
-            if (calculatedHeight > maxHeight) {
-                calculatedHeight = maxHeight;
-            }
-            if (calculatedHeight < 200) {
-                calculatedHeight = 200;
-            }
-
-            wrapperElement.style.height = calculatedHeight + "px";
-        };
-
-        // في حال كانت الصورة مخزنة مسبقاً في الذاكرة المؤقتة للمتصفح
-        if (imgElement.complete) {
-            imgElement.onload();
-        }
-
-        let prevBtn = document.querySelector(".prev-btn");
-        let nextBtn = document.querySelector(".next-btn");
-        
-        if (currentMenuImages.length <= 1) {
-            prevBtn.style.display = "none";
-            nextBtn.style.display = "none";
-        } else {
-            prevBtn.style.display = "flex";
-            nextBtn.style.display = "flex";
-        }
-    }
-
-    function changeSlide(direction) {
-        if (currentMenuImages.length === 0) return;
-        currentImageIndex += direction;
-
-        if (currentImageIndex < 0) {
-            currentImageIndex = currentMenuImages.length - 1;
-        } else if (currentImageIndex >= currentMenuImages.length) {
-            currentImageIndex = 0;
-        }
-
-        updateSliderImage();
     }
 
     function closeModal() {
