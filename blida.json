@@ -1,10 +1,10 @@
 [
     {
         "name": "saven",
-        "profileImg": "download.webp",
+        "profileImg": "images/menus/download.webp",
         "phone": "0558471328",
         "menuImages": [
-            "saven_blida.jpg"
+            "images/menus/saven_blida.jpg"
         ]
     }
 ]
