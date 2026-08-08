@@ -30,7 +30,7 @@
             background: linear-gradient(135deg, #000000, #0f172a, #1e3a8a, #090d16, #000000);
             background-size: 400% 400%;
             animation: waveBackground 12s ease infinite;
-            z-index: -2;
+            z-index: -3;
         }
 
         @keyframes waveBackground {
@@ -39,9 +39,48 @@
             100% { background-position: 0% 50%; }
         }
 
+        /* حاوية الخلفية المتطورة (UI/UX Backdrop) */
+        .backdrop-fx {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: -2;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        /* شبكة الإضاءة الجمالية الخفيفة */
+        .glow-mesh {
+            position: absolute;
+            width: 100%; height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.12) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(236, 72, 153, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(37, 99, 235, 0.06) 0%, transparent 50%);
+            filter: blur(40px);
+        }
+
         #particles-js { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
         .particle { position: absolute; background: #ffffff; border-radius: 50%; opacity: 0.2; animation: floatParticle linear infinite; }
         @keyframes floatParticle { 0% { transform: translateY(100vh) scale(0); } 50% { opacity: 0.5; } 100% { transform: translateY(-50px) scale(1); opacity: 0; } }
+
+        /* فقاعات الخلفية الجمالية الجديدة (Bubbles) */
+        .bubble {
+            position: absolute;
+            bottom: -100px;
+            background: radial-gradient(circle at 30% 30%, rgba(56, 189, 248, 0.25), rgba(59, 130, 246, 0.05));
+            border: 1px solid rgba(56, 189, 248, 0.15);
+            border-radius: 50%;
+            box-shadow: inset 0 0 10px rgba(56, 189, 248, 0.2), 0 0 15px rgba(37, 99, 235, 0.1);
+            animation: riseBubble linear infinite;
+        }
+
+        @keyframes riseBubble {
+            0% { transform: translateY(0) scale(1) translateX(0); opacity: 0; }
+            20% { opacity: 0.6; }
+            80% { opacity: 0.6; }
+            100% { transform: translateY(-110vh) scale(1.2) translateX(30px); opacity: 0; }
+        }
 
         #loader { position: fixed; top: 0; left: 0; height: 3px; background: linear-gradient(90deg, #3b82f6, #ec4899); width: 0%; transition: width 0.3s ease-in-out; z-index: 9999; }
 
@@ -68,11 +107,12 @@
             gap: 8px;
         }
 
+        /* أنيميشن تكرار الهبوط حرف بحرف (مرتين) */
         .site-title span {
             display: inline-block;
             opacity: 0;
             transform: scale(1.8) translateY(60px);
-            animation: popAndSettle 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            animation: popAndSettleTwice 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
             background: linear-gradient(to right, #fff, #3b82f6);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -84,8 +124,11 @@
         .site-title span:nth-child(3) { animation-delay: 0.3s; }
         .site-title span:nth-child(4) { animation-delay: 0.4s; }
 
-        @keyframes popAndSettle {
+        @keyframes popAndSettleTwice {
             0% { opacity: 0; transform: scale(1.8) translateY(80px); }
+            40% { opacity: 1; transform: scale(0.9) translateY(-15px); }
+            60% { transform: scale(1.1) translateY(8px); }
+            80% { opacity: 1; transform: scale(0.97) translateY(-3px); }
             100% { opacity: 1; transform: scale(1) translateY(0); }
         }
 
@@ -157,7 +200,6 @@
         .restaurant-info h3 { margin: 0 0 8px 0; font-size: 24px; color: #ffffff; }
         .restaurant-info p { margin: 0 0 12px 0; font-size: 16px; color: #94a3b8; }
 
-        /* تصميم أزرار المنيو ورقم الهاتف داخل الكارت */
         .card-actions {
             display: flex;
             gap: 10px;
@@ -200,7 +242,6 @@
         }
         .phone-action-btn:hover { opacity: 0.9; }
 
-        /* نافذة العرض المنبثقة بجودة HD وتمرير سلس */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -233,7 +274,6 @@
 
         .modal-title { font-size: 24px; color: #ffffff; margin: 0 0 15px 0; }
 
-        /* معرض صور المنيو بالجودة الأصلية داخل المودال */
         .menu-gallery {
             display: flex;
             flex-direction: column;
@@ -251,7 +291,6 @@
             display: block;
         }
 
-        /* زر التحميل والتنزيل */
         .download-btn {
             display: inline-flex;
             align-items: center;
@@ -275,7 +314,13 @@
 <body>
 
 <div id="loader"></div>
-<div id="particles-js"></div>
+
+<!-- الخلفية المطورة: التموجات، النقاط، شبكة الإضاءة، والفقاعات الجمالية -->
+<div class="backdrop-fx">
+    <div class="glow-mesh"></div>
+    <div id="particles-js"></div>
+    <div id="bubbles-container"></div>
+</div>
 
 <div class="container" id="mainContainer">
     <div class="title-wrapper">
@@ -292,15 +337,11 @@
     <div id="resultsContainer" class="grid-container"></div>
 </div>
 
-<!-- النافذة المنبثقة لعرض صور المنيو بجودة HD مع زر التحميل -->
 <div id="restaurantModal" class="modal-overlay" onclick="closeModalOnOutside(event)">
     <div class="modal-content">
         <button class="close-btn" onclick="closeModal()">×</button>
         <h2 id="modalName" class="modal-title"></h2>
-        
-        <div id="menuGallery" class="menu-gallery">
-            <!-- ستتم تعبئة صور المنيو هنا ديناميكياً بجودتها الكاملة -->
-        </div>
+        <div id="menuGallery" class="menu-gallery"></div>
     </div>
 </div>
 
@@ -332,7 +373,24 @@
             container.appendChild(p);
         }
     }
+
+    function createBubbles() {
+        const container = document.getElementById("bubbles-container");
+        for (let i = 0; i < 15; i++) {
+            let b = document.createElement("div");
+            b.className = "bubble";
+            let size = Math.random() * 35 + 15;
+            b.style.width = size + "px";
+            b.style.height = size + "px";
+            b.style.left = Math.random() * 100 + "%";
+            b.style.animationDuration = (Math.random() * 8 + 6) + "s";
+            b.style.animationDelay = (Math.random() * 5) + "s";
+            container.appendChild(b);
+        }
+    }
+
     createParticles();
+    createBubbles();
 
     async function searchRestaurants() {
         let loader = document.getElementById("loader");
@@ -446,7 +504,6 @@
                 img.className = "hd-menu-img";
                 img.alt = `Menu ${index + 1}`;
 
-                // زر تحميل الصورة بجودتها الكاملة
                 let downloadBtn = document.createElement("a");
                 downloadBtn.href = imgSrc;
                 downloadBtn.download = `${rest.name}_menu_${index + 1}.jpg`;
