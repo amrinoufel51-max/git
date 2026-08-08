@@ -32,5 +32,22 @@
       "https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=800",
       "https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=800"
     ]
+    },
+  {
+    "name": "shawarma al bik",
+    "profileImg": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800",
+    "phone": "0661333444",
+    "menuImages": [
+      "https://images.unsplash.com/photo-1543353071-873f17a7a088?w=800",
+      "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=800",
+      "https://images.unsplash.com/photo-1550547660-d9450f859349?w=800",
+      "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=800",
+      "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=800",
+      "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=800",
+      "https://images.unsplash.com/photo-1600891964599-f61ba0e24092?w=800",
+      "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800",
+      "https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=800",
+      "https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=800"
+    ]
   }
 ]
